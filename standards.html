@@ -116,6 +116,11 @@ main{max-width:1100px;margin:0 auto;padding:16px 20px}
 .disclaimer{background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;padding:8px 12px;margin-bottom:14px;font-size:.75rem;color:#1e40af;display:flex;gap:7px;align-items:flex-start;line-height:1.45}
 .disclaimer svg{flex-shrink:0;margin-top:1px}
 
+/* ── FOOTER ── */
+footer{text-align:center;padding:28px 20px;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border);margin-top:32px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;align-items:center}
+footer a:hover{color:var(--text)}
+.footer-sep{color:var(--border)}
+
 @media(max-width:600px){
   .state-grid{grid-template-columns:1fr}
   .state-cell{border-right:none}
@@ -165,6 +170,14 @@ main{max-width:1100px;margin:0 auto;padding:16px 20px}
 </div>
 
 <main id="main"></main>
+
+<footer>
+  <span>© <span id="yr"></span> The Calculated Classroom · Axiomatic Field</span>
+  <span class="footer-sep">·</span>
+  <span>Grades 6–8 Math Standards Correlator</span>
+  <span class="footer-sep">·</span>
+  <a href="https://mkuh-cmd.github.io" style="color:inherit">Site Hub</a>
+</footer>
 
 <script>
 // ─── DATA ───────────────────────────────────────────────────────────────────
@@ -1054,6 +1067,7 @@ document.getElementById("stateToggles").querySelectorAll(".stbtn").forEach(btn=>
   });
 });
 
+document.getElementById("yr").textContent = new Date().getFullYear();
 render();
 
 </script>
