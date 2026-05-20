@@ -8,152 +8,163 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --navy:#1e3a5f;--navy-dk:#12263f;--navy-lt:#e8edf5;
-  --amber:#f59e0b;--amber-dk:#c47f0a;--amber-lt:#fef3c7;
-  --text:#111827;--muted:#6b7280;--radius:10px;
-  --rp:#7c3aed;--ns:#2563eb;--ee:#16a34a;--geo:#ea580c;--sp:#db2777;--fn:#0891b2;
+  --amber:#f59e0b;--text:#111827;--muted:#6b7280;--border:#e5e7eb;--bg:#f8fafc;
   --FL:#1d4ed8;--TX:#b91c1c;--CA:#b45309;--NY:#047857;
 }
-body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:#f8fafc;font-size:15px;line-height:1.5}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:var(--bg);font-size:14px;line-height:1.5}
 a{color:inherit;text-decoration:none}
-
-/* NAV */
-nav{position:sticky;top:0;z-index:100;background:var(--navy-dk);border-bottom:3px solid var(--amber);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.nav-brand{display:flex;flex-direction:column;line-height:1.2;margin-right:8px}
-.nav-sub{font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
-.nav-name{font-size:.9rem;font-weight:700;color:#fff}
-.nav-title{color:rgba(255,255,255,.85);font-size:.95rem;font-weight:600;flex:1}
-.nav-back{color:rgba(255,255,255,.6);font-size:.8rem;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.2);transition:all .15s}
-.nav-back:hover{color:#fff;background:rgba(255,255,255,.1)}
-
-/* SEARCH + CONTROLS */
-.controls{background:#fff;border-bottom:1px solid #e5e7eb;padding:12px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;position:sticky;top:55px;z-index:90}
-.search-wrap{position:relative;flex:1;min-width:180px;max-width:340px}
-.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none}
-#searchInput{width:100%;padding:8px 12px 8px 34px;border:1.5px solid #d1d5db;border-radius:8px;font-size:.88rem;outline:none;transition:border .15s}
-#searchInput:focus{border-color:var(--amber)}
-.grade-pills{display:flex;gap:4px}
-.pill{padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;border:1.5px solid #d1d5db;background:#fff;color:var(--muted);transition:all .15s}
-.pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.state-toggles{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
-.state-btn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s;user-select:none}
-.state-btn.FL{border-color:var(--FL);color:var(--FL)}
-.state-btn.TX{border-color:var(--TX);color:var(--TX)}
-.state-btn.CA{border-color:var(--CA);color:var(--CA)}
-.state-btn.NY{border-color:var(--NY);color:var(--NY)}
-.state-btn.active.FL{background:var(--FL);color:#fff}
-.state-btn.active.TX{background:var(--TX);color:#fff}
-.state-btn.active.CA{background:var(--CA);color:#fff}
-.state-btn.active.NY{background:var(--NY);color:#fff}
-.toggle-dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.4;transition:opacity .15s}
-.state-btn.active .toggle-dot{opacity:1;background:#fff}
-#resultCount{font-size:.8rem;color:var(--muted);padding:4px 0;white-space:nowrap}
-
-/* LAYOUT */
-.page{display:flex;min-height:calc(100vh - 110px)}
-.sidebar{width:220px;flex-shrink:0;background:#fff;border-right:1px solid #e5e7eb;padding:16px 0;position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto}
-.sb-section{margin-bottom:4px}
-.sb-grade{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 16px 4px;margin-top:8px}
-.sb-domain{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:.82rem;font-weight:500;color:var(--text);cursor:pointer;transition:background .1s;border-radius:0}
-.sb-domain:hover{background:#f3f4f6}
-.sb-domain.active{background:var(--navy-lt);color:var(--navy);font-weight:700}
-.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sb-count{margin-left:auto;font-size:.7rem;color:var(--muted);background:#f3f4f6;padding:1px 6px;border-radius:10px}
-
-/* MAIN */
-main{flex:1;padding:20px;min-width:0}
-.domain-section{margin-bottom:32px}
-.domain-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e5e7eb}
-.domain-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-.domain-name{font-size:1.05rem;font-weight:700;color:var(--text)}
-.domain-grade{font-size:.72rem;font-weight:700;color:var(--muted);background:#f3f4f6;padding:2px 8px;border-radius:10px}
-.cluster-label{font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:10px;margin-top:16px;padding-left:4px;text-transform:uppercase;letter-spacing:.06em}
-
-/* STANDARD CARD */
-.std-card{background:#fff;border:1px solid #e5e7eb;border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
-.std-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
-.std-card-header{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
-.std-code{font-size:.78rem;font-weight:700;white-space:nowrap;padding:3px 9px;border-radius:6px;color:#fff;flex-shrink:0;margin-top:1px;letter-spacing:.02em}
-.std-desc{font-size:.9rem;color:var(--text);flex:1;line-height:1.5}
-.std-expand{background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;border-radius:5px;flex-shrink:0;transition:all .15s;margin-top:0}
-.std-expand:hover{color:var(--text);background:#f3f4f6}
-.std-expand svg{transition:transform .2s}
-.std-expand.open svg{transform:rotate(180deg)}
-
-/* NCTM ROW */
-.nctm-row{background:#fffbeb;border-top:1px solid #fde68a;padding:9px 16px 9px 40px;display:flex;align-items:flex-start;gap:8px}
-.nctm-badge{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px solid #fde68a;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px}
-.nctm-text{font-size:.82rem;color:#78350f;line-height:1.45}
-
-/* STATE ROWS */
-.state-rows{border-top:1px solid #f3f4f6}
-.state-row{display:flex;align-items:flex-start;gap:10px;padding:9px 16px 9px 40px;border-top:1px solid #f9fafb;transition:background .1s}
-.state-row:hover{background:#f9fafb}
-.state-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;color:#fff;flex-shrink:0;width:34px;text-align:center;margin-top:1px}
-.state-label.FL{background:var(--FL)}
-.state-label.TX{background:var(--TX)}
-.state-label.CA{background:var(--CA)}
-.state-label.NY{background:var(--NY)}
-.state-codes{display:flex;flex-wrap:wrap;gap:6px;flex:1}
-.state-std{display:flex;align-items:flex-start;gap:6px}
-.s-code{font-size:.78rem;font-weight:700;color:var(--text);white-space:nowrap;background:#f3f4f6;padding:1px 7px;border-radius:4px;flex-shrink:0;margin-top:1px}
-.s-desc{font-size:.82rem;color:var(--muted);line-height:1.4}
-.s-sep{color:#d1d5db;font-size:.8rem;padding-top:1px}
-.no-match{font-size:.82rem;color:var(--muted);font-style:italic}
-
-/* HIGHLIGHT */
 mark{background:#fef9c3;border-radius:2px;padding:0 1px}
 
-/* EMPTY STATE */
-.empty{text-align:center;padding:60px 20px;color:var(--muted)}
-.empty h3{font-size:1.1rem;margin-bottom:8px;color:var(--text)}
+/* ── TOP NAV ── */
+.topnav{background:var(--navy-dk);border-bottom:3px solid var(--amber);padding:9px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200}
+.brand{display:flex;flex-direction:column;line-height:1.2}
+.brand-sub{font-size:.52rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+.brand-name{font-size:.88rem;font-weight:700;color:#fff}
+.nav-title{color:rgba(255,255,255,.8);font-size:.88rem;font-weight:500;flex:1;padding-left:4px}
+.nav-home{color:rgba(255,255,255,.55);font-size:.78rem;padding:4px 10px;border-radius:5px;border:1px solid rgba(255,255,255,.18);transition:all .15s}
+.nav-home:hover{color:#fff;background:rgba(255,255,255,.1)}
 
-/* DISCLAIMER */
-.disclaimer{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:.8rem;color:#1e40af;display:flex;gap:8px;align-items:flex-start}
+/* ── CONTROLS BAR ── */
+.ctrl{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:46px;z-index:190}
+.ctrl-row{display:flex;align-items:center;gap:8px;padding:8px 20px;flex-wrap:wrap}
+.ctrl-row+.ctrl-row{padding-top:0;padding-bottom:8px;border-top:1px solid #f3f4f6}
+
+/* Search */
+.srch{position:relative;flex:1;min-width:160px;max-width:280px}
+.srch svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none}
+#searchInput{width:100%;padding:6px 10px 6px 30px;border:1.5px solid var(--border);border-radius:7px;font-size:.83rem;outline:none;font-family:inherit;transition:border .15s}
+#searchInput:focus{border-color:var(--amber)}
+
+/* Pills */
+.pills{display:flex;gap:3px}
+.pill{padding:5px 12px;border-radius:16px;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--muted);transition:all .15s;white-space:nowrap}
+.pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* Domain chips */
+.domain-chips{display:flex;gap:3px;flex-wrap:wrap}
+.dchip{padding:4px 10px;border-radius:14px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid;opacity:.45;transition:all .15s;white-space:nowrap}
+.dchip.active{opacity:1}
+.dchip[data-d="ALL"]{border-color:#6b7280;color:#6b7280}
+.dchip[data-d="ALL"].active{background:#6b7280;color:#fff;border-color:#6b7280}
+
+/* State toggles */
+.states{display:flex;gap:4px;margin-left:auto}
+.stbtn{padding:4px 10px;border-radius:14px;font-size:.75rem;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .15s;user-select:none}
+.stbtn.FL{border-color:var(--FL);color:var(--FL)}
+.stbtn.TX{border-color:var(--TX);color:var(--TX)}
+.stbtn.CA{border-color:var(--CA);color:var(--CA)}
+.stbtn.NY{border-color:var(--NY);color:var(--NY)}
+.stbtn.active.FL{background:var(--FL);color:#fff}
+.stbtn.active.TX{background:var(--TX);color:#fff}
+.stbtn.active.CA{background:var(--CA);color:#fff}
+.stbtn.active.NY{background:var(--NY);color:#fff}
+
+/* Utility buttons */
+.util-btn{padding:5px 12px;border-radius:7px;font-size:.78rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--muted);transition:all .15s;white-space:nowrap}
+.util-btn:hover{border-color:#9ca3af;color:var(--text)}
+#resultCount{font-size:.75rem;color:var(--muted);white-space:nowrap}
+
+/* ── MAIN CONTENT ── */
+main{max-width:1100px;margin:0 auto;padding:16px 20px}
+
+/* Domain section */
+.dsec{margin-bottom:24px}
+.dsec-hdr{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border:1px solid var(--border);border-left:4px solid;border-radius:0 8px 8px 0;margin-bottom:2px}
+.dsec-name{font-size:.88rem;font-weight:700}
+.dsec-grade{font-size:.68rem;font-weight:700;color:var(--muted);background:#f3f4f6;padding:2px 7px;border-radius:10px}
+.dsec-count{font-size:.7rem;color:var(--muted);margin-left:auto}
+
+/* Cluster label */
+.clabel{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px 4px;margin-top:2px}
+
+/* Standard row */
+.std-row{background:#fff;border:1px solid var(--border);border-left:3px solid;margin-bottom:2px;border-radius:0 6px 6px 0;overflow:hidden;transition:box-shadow .12s}
+.std-row:hover{box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.row-hdr{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;user-select:none}
+.row-hdr:hover{background:#fafafa}
+.std-code{font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:5px;color:#fff;flex-shrink:0;letter-spacing:.02em;white-space:nowrap}
+.row-desc{font-size:.85rem;color:var(--text);flex:1;line-height:1.45}
+.nctm-chip{font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px solid #fde68a;padding:1px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.row-chevron{color:var(--muted);flex-shrink:0;transition:transform .2s;margin-left:4px}
+.row-chevron.open{transform:rotate(180deg)}
+
+/* Expanded detail */
+.row-detail{display:none;border-top:1px solid #f3f4f6}
+.row-detail.open{display:block}
+.nctm-bar{background:#fffbeb;border-bottom:1px dashed #fde68a;padding:7px 12px 7px 34px;font-size:.8rem;color:#78350f;line-height:1.45}
+.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid #f3f4f6}
+.state-cell{padding:8px 12px 8px 12px;border-right:1px solid #f3f4f6;border-bottom:1px solid #f3f4f6}
+.state-cell:nth-child(2n){border-right:none}
+.state-cell:nth-last-child(-n+2){border-bottom:none}
+.state-cell-hdr{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.state-tag{font-size:.65rem;font-weight:700;letter-spacing:.06em;color:#fff;padding:1px 6px;border-radius:3px;flex-shrink:0}
+.state-tag.FL{background:var(--FL)}
+.state-tag.TX{background:var(--TX)}
+.state-tag.CA{background:var(--CA)}
+.state-tag.NY{background:var(--NY)}
+.sc-code{font-size:.72rem;font-weight:700;background:#f3f4f6;padding:1px 6px;border-radius:3px;color:var(--text)}
+.sc-desc{font-size:.78rem;color:var(--muted);line-height:1.4}
+.sc-none{font-size:.78rem;color:#d1d5db;font-style:italic}
+.state-grid-1col{grid-template-columns:1fr}
+
+/* single state full-width */
+.state-cell.full{border-right:none}
+
+/* Empty / disclaimer */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty h3{font-size:1rem;margin-bottom:6px;color:var(--text)}
+.disclaimer{background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;padding:8px 12px;margin-bottom:14px;font-size:.75rem;color:#1e40af;display:flex;gap:7px;align-items:flex-start;line-height:1.45}
 .disclaimer svg{flex-shrink:0;margin-top:1px}
 
-@media(max-width:700px){
-  .sidebar{display:none}
-  .controls{top:53px;gap:8px}
-  .state-toggles{margin-left:0}
+@media(max-width:600px){
+  .state-grid{grid-template-columns:1fr}
+  .state-cell{border-right:none}
+  .state-cell:nth-last-child(-n+2){border-bottom:1px solid #f3f4f6}
+  .state-cell:last-child{border-bottom:none}
+  .ctrl-row{gap:6px}
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-brand">
-    <span class="nav-sub">The Calculated Classroom</span>
-    <span class="nav-name">Axiomatic Field</span>
+<div class="topnav">
+  <div class="brand">
+    <span class="brand-sub">The Calculated Classroom</span>
+    <span class="brand-name">Axiomatic Field</span>
   </div>
   <span class="nav-title">Math Standards Correlator · Grades 6–8</span>
-  <a href="index.html" class="nav-back">← Home</a>
-</nav>
-
-<div class="controls">
-  <div class="search-wrap">
-    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input id="searchInput" type="search" placeholder="Search code or keyword…" autocomplete="off">
-  </div>
-  <div class="grade-pills" id="gradePills">
-    <button class="pill active" data-grade="all">All</button>
-    <button class="pill" data-grade="6">Grade 6</button>
-    <button class="pill" data-grade="7">Grade 7</button>
-    <button class="pill" data-grade="8">Grade 8</button>
-  </div>
-  <div class="state-toggles" id="stateToggles">
-    <button class="state-btn FL active" data-state="FL"><span class="toggle-dot"></span>FL</button>
-    <button class="state-btn TX active" data-state="TX"><span class="toggle-dot"></span>TX</button>
-    <button class="state-btn CA active" data-state="CA"><span class="toggle-dot"></span>CA</button>
-    <button class="state-btn NY active" data-state="NY"><span class="toggle-dot"></span>NY</button>
-  </div>
-  <span id="resultCount"></span>
-  <button id="expandAllBtn" onclick="toggleAllCards()" style="padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;border:1.5px solid #d1d5db;background:#fff;color:#374151;transition:all .15s">Expand All</button>
+  <a href="index.html" class="nav-home">← Home</a>
 </div>
 
-<div class="page">
-  <nav class="sidebar" id="sidebar"></nav>
-  <main id="main"></main>
+<!-- Row 1: search + grade + states + actions -->
+<div class="ctrl">
+  <div class="ctrl-row">
+    <div class="srch">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="searchInput" type="search" placeholder="Search code or keyword…" autocomplete="off">
+    </div>
+    <div class="pills" id="gradePills">
+      <button class="pill active" data-grade="all">All</button>
+      <button class="pill" data-grade="6">Gr 6</button>
+      <button class="pill" data-grade="7">Gr 7</button>
+      <button class="pill" data-grade="8">Gr 8</button>
+    </div>
+    <div class="states" id="stateToggles">
+      <button class="stbtn FL active" data-state="FL">FL</button>
+      <button class="stbtn TX active" data-state="TX">TX</button>
+      <button class="stbtn CA active" data-state="CA">CA</button>
+      <button class="stbtn NY active" data-state="NY">NY</button>
+    </div>
+    <span id="resultCount"></span>
+    <button class="util-btn" id="expandAllBtn" onclick="toggleAllCards()">Expand All</button>
+  </div>
+  <!-- Row 2: domain filter chips -->
+  <div class="ctrl-row" id="domainChips">
+    <div class="domain-chips"></div>
+  </div>
 </div>
+
+<main id="main"></main>
 
 <script>
 // ─── DATA ───────────────────────────────────────────────────────────────────
@@ -835,6 +846,7 @@ const S = [
 // ─── APP ────────────────────────────────────────────────────────────────────
 let activeGrade = "all";
 let activeStates = new Set(["FL","TX","CA","NY"]);
+let activeDomain = "ALL";
 let searchQuery = "";
 
 function esc(str){
@@ -850,117 +862,114 @@ function highlight(str, q){
 function getDomainColor(d){return DOMAIN_COLORS[d]||"#6b7280"}
 function getDomainName(d){return DOMAIN_NAMES[d]||d}
 
+function matchesSearch(s, q){
+  if(!q) return true;
+  return s.id.toLowerCase().includes(q) ||
+         s.desc.toLowerCase().includes(q) ||
+         s.nctm.toLowerCase().includes(q) ||
+         ["FL","TX","CA","NY"].some(st=>
+           s[st].some(c=>c.c.toLowerCase().includes(q)||c.d.toLowerCase().includes(q))
+         );
+}
+
 function getVisibleStandards(){
   const q = searchQuery.toLowerCase().trim();
   return S.filter(s=>{
     if(activeGrade !== "all" && s.g !== parseInt(activeGrade)) return false;
-    if(!q) return true;
-    return s.id.toLowerCase().includes(q) ||
-           s.desc.toLowerCase().includes(q) ||
-           s.nctm.toLowerCase().includes(q) ||
-           ["FL","TX","CA","NY"].some(st=>
-             s[st].some(c=>c.c.toLowerCase().includes(q)||c.d.toLowerCase().includes(q))
-           );
+    if(activeDomain !== "ALL" && s.d !== activeDomain) return false;
+    return matchesSearch(s, q);
   });
 }
 
 function groupStandards(list){
-  // group by grade → domain → cluster
   const out = {};
   list.forEach(s=>{
     const gk = s.g;
     if(!out[gk]) out[gk]={};
-    const dk = s.d;
-    if(!out[gk][dk]) out[gk][dk]={};
-    const ck = s.cl;
-    if(!out[gk][dk][ck]) out[gk][dk][ck]={name:s.clN, items:[]};
-    out[gk][dk][ck].items.push(s);
+    if(!out[gk][s.d]) out[gk][s.d]={};
+    if(!out[gk][s.d][s.cl]) out[gk][s.d][s.cl]={name:s.clN, items:[]};
+    out[gk][s.d][s.cl].items.push(s);
   });
   return out;
 }
 
-function renderStateRow(s, state){
-  if(!activeStates.has(state)) return "";
+function renderStateCell(s, state){
   const corrs = s[state];
-  if(!corrs || !corrs.length) return `<div class="state-row"><span class="state-label ${state}">${state}</span><span class="no-match">Not directly addressed in ${state} standards at this grade level.</span></div>`;
   const q = searchQuery.toLowerCase().trim();
-  const pairs = corrs.map((c,i)=>{
-    const hasCode = c.c && c.c.trim();
-    const codeHtml = hasCode ? `<span class="s-code">${highlight(c.c,q)}</span>` : "";
-    return `<span class="state-std">${codeHtml}<span class="s-desc">${highlight(c.d,q)}</span></span>${i<corrs.length-1?'<span class="s-sep">·</span>':''}`;
-  }).join("");
-  return `<div class="state-row"><span class="state-label ${state}">${state}</span><div class="state-codes">${pairs}</div></div>`;
-}
-
-function renderCard(s){
-  const color = getDomainColor(s.d);
-  const q = searchQuery.toLowerCase().trim();
-  const id = "card-"+s.id.replace(/\./g,"-");
-  const stateRowsHtml = ["FL","TX","CA","NY"].map(st=>renderStateRow(s,st)).join("");
-  const hasStates = activeStates.size > 0;
-  // Auto-expand when searching so matching state codes are immediately visible
-  const expanded = q.length > 0 && hasStates;
-  return `<div class="std-card" id="${id}">
-    <div class="std-card-header">
-      <span class="std-code" style="background:${color}">${s.id}</span>
-      <span class="std-desc">${highlight(s.desc,q)}</span>
-      <button class="std-expand${expanded?' open':''}" onclick="toggleCard(this)" aria-label="Expand" ${!hasStates?'style="visibility:hidden"':''}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-    </div>
-    <div class="nctm-row">
-      <span class="nctm-badge">NCTM</span>
-      <span class="nctm-text">${highlight(s.nctm,q)}</span>
-    </div>
-    <div class="state-rows" style="display:${expanded?'block':'none'}">${stateRowsHtml}</div>
+  let inner = "";
+  if(!corrs || !corrs.length || (corrs.length===1 && !corrs[0].c && !corrs[0].d)){
+    inner = `<span class="sc-none">Not directly addressed in ${state}</span>`;
+  } else {
+    inner = corrs.map(c=>{
+      const hasCode = c.c && c.c.trim();
+      return `<div>${hasCode?`<span class="sc-code">${highlight(c.c,q)}</span> `:''}` +
+             `<span class="sc-desc">${highlight(c.d,q)}</span></div>`;
+    }).join("");
+  }
+  return `<div class="state-cell">
+    <div class="state-cell-hdr"><span class="state-tag ${state}">${state}</span></div>
+    ${inner}
   </div>`;
 }
 
-function toggleCard(btn){
-  btn.classList.toggle("open");
-  const stateRows = btn.closest(".std-card").querySelector(".state-rows");
-  stateRows.style.display = stateRows.style.display==="none" ? "block" : "none";
+function renderRow(s){
+  const color = getDomainColor(s.d);
+  const q = searchQuery.toLowerCase().trim();
+  const id = "row-"+s.id.replace(/\./g,"-");
+  const expanded = q.length > 0;
+  const activeStateList = ["FL","TX","CA","NY"].filter(st=>activeStates.has(st));
+  const cellsHtml = activeStateList.map(st=>renderStateCell(s,st)).join("");
+  const gridClass = "state-grid"+(activeStateList.length===1?" state-grid-1col":"");
+  return `<div class="std-row" id="${id}" style="border-left-color:${color}">
+    <div class="row-hdr" onclick="toggleRow(this)">
+      <span class="std-code" style="background:${color}">${s.id}</span>
+      <span class="row-desc">${highlight(s.desc,q)}</span>
+      ${activeStates.size>0?'<span class="nctm-chip">NCTM</span>':''}
+      <svg class="row-chevron${expanded?' open':''}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="row-detail${expanded?' open':''}">
+      <div class="nctm-bar">${highlight(s.nctm,q)}</div>
+      ${activeStates.size>0?`<div class="${gridClass}">${cellsHtml}</div>`:''}
+    </div>
+  </div>`;
 }
 
-function renderSidebar(grouped){
-  const grades = Object.keys(grouped).sort();
-  let html = "";
-  grades.forEach(g=>{
-    html += `<div class="sb-section"><div class="sb-grade">Grade ${g}</div>`;
-    const domains = Object.keys(grouped[g]).sort((a,b)=>{
-      const order = ["RP","NS","EE","G","SP","F"];
-      return order.indexOf(a)-order.indexOf(b);
-    });
-    domains.forEach(d=>{
-      const count = Object.values(grouped[g][d]).reduce((n,cl)=>n+cl.items.length,0);
-      html += `<div class="sb-domain" onclick="scrollToDomain('${g}-${d}')" data-domain="${g}-${d}">
-        <span class="sb-dot" style="background:${getDomainColor(d)}"></span>
-        <span>${getDomainName(d)}</span>
-        <span class="sb-count">${count}</span>
-      </div>`;
-    });
-    html += "</div>";
+function populateDomainChips(){
+  const q = searchQuery.toLowerCase().trim();
+  const unfiltered = S.filter(s=>{
+    if(activeGrade !== "all" && s.g !== parseInt(activeGrade)) return false;
+    return matchesSearch(s, q);
   });
-  document.getElementById("sidebar").innerHTML = html;
+  const domainOrder = ["RP","NS","EE","G","SP","F"];
+  const counts = {};
+  unfiltered.forEach(s=>{counts[s.d]=(counts[s.d]||0)+1});
+  const total = unfiltered.length;
+  let html = `<button class="dchip${activeDomain==="ALL"?' active':''}" data-d="ALL" onclick="setDomain('ALL')">All (${total})</button>`;
+  domainOrder.forEach(d=>{
+    if(!counts[d]) return;
+    const color = getDomainColor(d);
+    html += `<button class="dchip${activeDomain===d?' active':''}" data-d="${d}" style="border-color:${color};color:${color}" onclick="setDomain('${d}')">${d} · ${getDomainName(d)} (${counts[d]})</button>`;
+  });
+  document.querySelector("#domainChips .domain-chips").innerHTML = html;
 }
 
-function scrollToDomain(key){
-  const el = document.getElementById("domain-"+key);
-  if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+function setDomain(d){
+  activeDomain = d;
+  render();
 }
 
 function render(){
+  populateDomainChips();
   const visible = getVisibleStandards();
   const grouped = groupStandards(visible);
-  renderSidebar(grouped);
-
   const grades = Object.keys(grouped).sort();
   let html = "";
 
   if(!visible.length){
-    html = `<div class="empty"><h3>No standards found</h3><p>Try a different search term or adjust your filters.</p></div>`;
-    document.getElementById("main").innerHTML = html;
+    document.getElementById("main").innerHTML = `<div class="empty"><h3>No standards found</h3><p>Try a different search term or adjust your filters.</p></div>`;
     document.getElementById("resultCount").textContent = "0 results";
+    _allExpanded = false;
+    document.getElementById("expandAllBtn").textContent = "Expand All";
     return;
   }
 
@@ -970,22 +979,23 @@ function render(){
   </div>`;
 
   const domainOrder = ["RP","NS","EE","G","SP","F"];
-
   grades.forEach(g=>{
     const domains = Object.keys(grouped[g]).sort((a,b)=>domainOrder.indexOf(a)-domainOrder.indexOf(b));
     domains.forEach(d=>{
       const color = getDomainColor(d);
-      html += `<div class="domain-section" id="domain-${g}-${d}">
-        <div class="domain-header">
-          <span class="domain-dot" style="background:${color}"></span>
-          <span class="domain-name">${getDomainName(d)}</span>
-          <span class="domain-grade">Grade ${g}</span>
+      const total = Object.values(grouped[g][d]).reduce((n,cl)=>n+cl.items.length,0);
+      html += `<div class="dsec" id="dsec-${g}-${d}">
+        <div class="dsec-hdr" style="border-left-color:${color}">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};flex-shrink:0"></span>
+          <span class="dsec-name">${getDomainName(d)}</span>
+          <span class="dsec-grade">Grade ${g}</span>
+          <span class="dsec-count">${total} standard${total!==1?'s':''}</span>
         </div>`;
       const clusters = grouped[g][d];
       Object.keys(clusters).sort().forEach(ck=>{
         const cl = clusters[ck];
-        html += `<div class="cluster-label">${cl.name}</div>`;
-        cl.items.forEach(s=>{html += renderCard(s)});
+        html += `<div class="clabel">${cl.name}</div>`;
+        cl.items.forEach(s=>{html += renderRow(s)});
       });
       html += `</div>`;
     });
@@ -994,41 +1004,23 @@ function render(){
   document.getElementById("main").innerHTML = html;
   document.getElementById("resultCount").textContent = visible.length+" standard"+(visible.length!==1?"s":"");
 
-  // Sync expand-all button label: if search is active, cards start expanded
   _allExpanded = searchQuery.trim().length > 0;
   document.getElementById("expandAllBtn").textContent = _allExpanded ? "Collapse All" : "Expand All";
-
-  // highlight active sidebar domain on scroll
-  observeDomains();
 }
 
-let _domainObserver = null;
-function observeDomains(){
-  if(_domainObserver) _domainObserver.disconnect();
-  const sections = document.querySelectorAll(".domain-section");
-  if(!sections.length) return;
-  _domainObserver = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        document.querySelectorAll(".sb-domain").forEach(el=>el.classList.remove("active"));
-        const key = e.target.id.replace("domain-","");
-        const sb = document.querySelector(`.sb-domain[data-domain="${key}"]`);
-        if(sb) sb.classList.add("active");
-      }
-    });
-  },{rootMargin:"-20% 0px -70% 0px"});
-  sections.forEach(s=>_domainObserver.observe(s));
+function toggleRow(hdr){
+  const detail = hdr.nextElementSibling;
+  const chevron = hdr.querySelector(".row-chevron");
+  const isOpen = detail.classList.contains("open");
+  detail.classList.toggle("open", !isOpen);
+  chevron.classList.toggle("open", !isOpen);
 }
 
 let _allExpanded = false;
 function toggleAllCards(){
   _allExpanded = !_allExpanded;
-  document.querySelectorAll(".state-rows").forEach(el=>{
-    el.style.display = _allExpanded ? "block" : "none";
-  });
-  document.querySelectorAll(".std-expand").forEach(btn=>{
-    btn.classList.toggle("open", _allExpanded);
-  });
+  document.querySelectorAll(".row-detail").forEach(el=>el.classList.toggle("open",_allExpanded));
+  document.querySelectorAll(".row-chevron").forEach(el=>el.classList.toggle("open",_allExpanded));
   document.getElementById("expandAllBtn").textContent = _allExpanded ? "Collapse All" : "Expand All";
 }
 
@@ -1047,11 +1039,11 @@ document.getElementById("gradePills").querySelectorAll(".pill").forEach(btn=>{
   });
 });
 
-document.getElementById("stateToggles").querySelectorAll(".state-btn").forEach(btn=>{
+document.getElementById("stateToggles").querySelectorAll(".stbtn").forEach(btn=>{
   btn.addEventListener("click",()=>{
     const st = btn.dataset.state;
     if(activeStates.has(st)){
-      if(activeStates.size===1) return; // keep at least one
+      if(activeStates.size===1) return;
       activeStates.delete(st);
       btn.classList.remove("active");
     } else {
