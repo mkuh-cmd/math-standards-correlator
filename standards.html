@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Standards Correlator · Grades 6–8 | The Calculated Classroom</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1e3a5f;--navy-dk:#12263f;--navy-lt:#e8edf5;
+  --amber:#f59e0b;--amber-dk:#c47f0a;--amber-lt:#fef3c7;
+  --text:#111827;--muted:#6b7280;--radius:10px;
+  --rp:#7c3aed;--ns:#2563eb;--ee:#16a34a;--geo:#ea580c;--sp:#db2777;--fn:#0891b2;
+  --FL:#1d4ed8;--TX:#b91c1c;--CA:#b45309;--NY:#047857;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;color:var(--text);background:#f8fafc;font-size:15px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--navy-dk);border-bottom:3px solid var(--amber);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.nav-brand{display:flex;flex-direction:column;line-height:1.2;margin-right:8px}
+.nav-sub{font-size:.55rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+.nav-name{font-size:.9rem;font-weight:700;color:#fff}
+.nav-title{color:rgba(255,255,255,.85);font-size:.95rem;font-weight:600;flex:1}
+.nav-back{color:rgba(255,255,255,.6);font-size:.8rem;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.2);transition:all .15s}
+.nav-back:hover{color:#fff;background:rgba(255,255,255,.1)}
+
+/* SEARCH + CONTROLS */
+.controls{background:#fff;border-bottom:1px solid #e5e7eb;padding:12px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;position:sticky;top:55px;z-index:90}
+.search-wrap{position:relative;flex:1;min-width:180px;max-width:340px}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none}
+#searchInput{width:100%;padding:8px 12px 8px 34px;border:1.5px solid #d1d5db;border-radius:8px;font-size:.88rem;outline:none;transition:border .15s}
+#searchInput:focus{border-color:var(--amber)}
+.grade-pills{display:flex;gap:4px}
+.pill{padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;border:1.5px solid #d1d5db;background:#fff;color:var(--muted);transition:all .15s}
+.pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.state-toggles{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.state-btn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:.8rem;font-weight:600;cursor:pointer;border:1.5px solid;transition:all .15s;user-select:none}
+.state-btn.FL{border-color:var(--FL);color:var(--FL)}
+.state-btn.TX{border-color:var(--TX);color:var(--TX)}
+.state-btn.CA{border-color:var(--CA);color:var(--CA)}
+.state-btn.NY{border-color:var(--NY);color:var(--NY)}
+.state-btn.active.FL{background:var(--FL);color:#fff}
+.state-btn.active.TX{background:var(--TX);color:#fff}
+.state-btn.active.CA{background:var(--CA);color:#fff}
+.state-btn.active.NY{background:var(--NY);color:#fff}
+.toggle-dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.4;transition:opacity .15s}
+.state-btn.active .toggle-dot{opacity:1;background:#fff}
+#resultCount{font-size:.8rem;color:var(--muted);padding:4px 0;white-space:nowrap}
+
+/* LAYOUT */
+.page{display:flex;min-height:calc(100vh - 110px)}
+.sidebar{width:220px;flex-shrink:0;background:#fff;border-right:1px solid #e5e7eb;padding:16px 0;position:sticky;top:110px;height:calc(100vh - 110px);overflow-y:auto}
+.sb-section{margin-bottom:4px}
+.sb-grade{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 16px 4px;margin-top:8px}
+.sb-domain{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:.82rem;font-weight:500;color:var(--text);cursor:pointer;transition:background .1s;border-radius:0}
+.sb-domain:hover{background:#f3f4f6}
+.sb-domain.active{background:var(--navy-lt);color:var(--navy);font-weight:700}
+.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sb-count{margin-left:auto;font-size:.7rem;color:var(--muted);background:#f3f4f6;padding:1px 6px;border-radius:10px}
+
+/* MAIN */
+main{flex:1;padding:20px;min-width:0}
+.domain-section{margin-bottom:32px}
+.domain-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e5e7eb}
+.domain-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.domain-name{font-size:1.05rem;font-weight:700;color:var(--text)}
+.domain-grade{font-size:.72rem;font-weight:700;color:var(--muted);background:#f3f4f6;padding:2px 8px;border-radius:10px}
+.cluster-label{font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:10px;margin-top:16px;padding-left:4px;text-transform:uppercase;letter-spacing:.06em}
+
+/* STANDARD CARD */
+.std-card{background:#fff;border:1px solid #e5e7eb;border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
+.std-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.std-card-header{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.std-code{font-size:.78rem;font-weight:700;white-space:nowrap;padding:3px 9px;border-radius:6px;color:#fff;flex-shrink:0;margin-top:1px;letter-spacing:.02em}
+.std-desc{font-size:.9rem;color:var(--text);flex:1;line-height:1.5}
+.std-expand{background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;border-radius:5px;flex-shrink:0;transition:all .15s;margin-top:0}
+.std-expand:hover{color:var(--text);background:#f3f4f6}
+.std-expand svg{transition:transform .2s}
+.std-expand.open svg{transform:rotate(180deg)}
+
+/* NCTM ROW */
+.nctm-row{background:#fffbeb;border-top:1px solid #fde68a;padding:9px 16px 9px 40px;display:flex;align-items:flex-start;gap:8px}
+.nctm-badge{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px solid #fde68a;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.nctm-text{font-size:.82rem;color:#78350f;line-height:1.45}
+
+/* STATE ROWS */
+.state-rows{border-top:1px solid #f3f4f6}
+.state-row{display:flex;align-items:flex-start;gap:10px;padding:9px 16px 9px 40px;border-top:1px solid #f9fafb;transition:background .1s}
+.state-row:hover{background:#f9fafb}
+.state-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;color:#fff;flex-shrink:0;width:34px;text-align:center;margin-top:1px}
+.state-label.FL{background:var(--FL)}
+.state-label.TX{background:var(--TX)}
+.state-label.CA{background:var(--CA)}
+.state-label.NY{background:var(--NY)}
+.state-codes{display:flex;flex-wrap:wrap;gap:6px;flex:1}
+.state-std{display:flex;align-items:flex-start;gap:6px}
+.s-code{font-size:.78rem;font-weight:700;color:var(--text);white-space:nowrap;background:#f3f4f6;padding:1px 7px;border-radius:4px;flex-shrink:0;margin-top:1px}
+.s-desc{font-size:.82rem;color:var(--muted);line-height:1.4}
+.s-sep{color:#d1d5db;font-size:.8rem;padding-top:1px}
+.no-match{font-size:.82rem;color:var(--muted);font-style:italic}
+
+/* HIGHLIGHT */
+mark{background:#fef9c3;border-radius:2px;padding:0 1px}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty h3{font-size:1.1rem;margin-bottom:8px;color:var(--text)}
+
+/* DISCLAIMER */
+.disclaimer{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:.8rem;color:#1e40af;display:flex;gap:8px;align-items:flex-start}
+.disclaimer svg{flex-shrink:0;margin-top:1px}
+
+@media(max-width:700px){
+  .sidebar{display:none}
+  .controls{top:53px;gap:8px}
+  .state-toggles{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <span class="nav-sub">The Calculated Classroom</span>
+    <span class="nav-name">Axiomatic Field</span>
+  </div>
+  <span class="nav-title">Math Standards Correlator · Grades 6–8</span>
+  <a href="index.html" class="nav-back">← Home</a>
+</nav>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="searchInput" type="search" placeholder="Search code or keyword…" autocomplete="off">
+  </div>
+  <div class="grade-pills" id="gradePills">
+    <button class="pill active" data-grade="all">All</button>
+    <button class="pill" data-grade="6">Grade 6</button>
+    <button class="pill" data-grade="7">Grade 7</button>
+    <button class="pill" data-grade="8">Grade 8</button>
+  </div>
+  <div class="state-toggles" id="stateToggles">
+    <button class="state-btn FL active" data-state="FL"><span class="toggle-dot"></span>FL</button>
+    <button class="state-btn TX active" data-state="TX"><span class="toggle-dot"></span>TX</button>
+    <button class="state-btn CA active" data-state="CA"><span class="toggle-dot"></span>CA</button>
+    <button class="state-btn NY active" data-state="NY"><span class="toggle-dot"></span>NY</button>
+  </div>
+  <span id="resultCount"></span>
+  <button id="expandAllBtn" onclick="toggleAllCards()" style="padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;border:1.5px solid #d1d5db;background:#fff;color:#374151;transition:all .15s">Expand All</button>
+</div>
+
+<div class="page">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main id="main"></main>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+// States: FL = Florida BEST, TX = Texas TEKS, CA = California CCSS, NY = NY Next Gen
+// Note: CA and NY align closely with CCSS; differences noted where significant.
+// Correlations are approximate — verify against current official documents.
+
+const DOMAIN_COLORS = {RP:"#7c3aed",NS:"#2563eb",EE:"#16a34a",G:"#ea580c",SP:"#db2777",F:"#0891b2"};
+const DOMAIN_NAMES  = {RP:"Ratios & Proportional Relationships",NS:"The Number System",EE:"Expressions & Equations",G:"Geometry",SP:"Statistics & Probability",F:"Functions"};
+
+const S = [
+// ════════════════════════════════════ GRADE 6 ════════════════════════════════
+// ── 6.RP ──────────────────────────────────────────────────────────────────
+{g:6,d:"RP",cl:"A",clN:"Understand ratio concepts and use ratio reasoning",
+ id:"6.RP.A.1",desc:"Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities.",
+ nctm:"Grade 6 FP2 · Number and Operations: Developing an understanding of proportionality — ratios as multiplicative comparisons between two quantities.",
+ FL:[{c:"MA.6.AR.1.1",d:"Write and interpret ratios to show relative sizes of two quantities using a/b, a to b, or a:b notation."}],
+ TX:[{c:"6.4(B)",d:"Apply qualitative and quantitative reasoning to solve prediction and comparison problems involving ratios and rates."}],
+ CA:[{c:"6.RP.1",d:"Same as CCSS. CA emphasizes real-world ratio contexts."}],
+ NY:[{c:"6.RP.A.1",d:"Same as CCSS."}]},
+
+{g:6,d:"RP",cl:"A",clN:"Understand ratio concepts and use ratio reasoning",
+ id:"6.RP.A.2",desc:"Understand the concept of a unit rate a/b associated with a ratio a:b (b ≠ 0); use rate language in context.",
+ nctm:"Grade 6 FP2 · Number and Operations: Unit rates as the ratio of quantities in a real-world context.",
+ FL:[{c:"MA.6.AR.1.2",d:"Given a unit rate, apply it to solve one- and two-step problems; determine unit rates within ratio relationships."}],
+ TX:[{c:"6.4(C)",d:"Give examples of ratios as multiplicative comparisons of two quantities describing the same attribute."}],
+ CA:[{c:"6.RP.2",d:"Same as CCSS."}],
+ NY:[{c:"6.RP.A.2",d:"Same as CCSS."}]},
+
+{g:6,d:"RP",cl:"A",clN:"Understand ratio concepts and use ratio reasoning",
+ id:"6.RP.A.3",desc:"Use ratio and rate reasoning to solve real-world and mathematical problems (ratio tables, double number lines, unit rates, percents, unit conversion). [Sub-standards a–d]",
+ nctm:"Grade 6 FP2 · Number and Operations: Applying proportionality to solve problems using ratios, rates, and percents.",
+ FL:[{c:"MA.6.AR.1.3",d:"Generate or complete a ratio table to solve mathematical or real-world problems."},{c:"MA.6.AR.1.4",d:"Apply ratio relationships to convert within a measurement system."},{c:"MA.6.AR.1.5",d:"Solve problems involving ratios, rates, and unit rates, including comparisons, mixtures, and conversions."}],
+ TX:[{c:"6.4(B)",d:"Apply qualitative and quantitative reasoning involving ratios and rates."},{c:"6.4(D)",d:"Give examples of rates as the comparison by division of two quantities with different attributes."},{c:"6.5(A)",d:"Represent problems involving ratios using scale factors, tables, graphs, and proportions."},{c:"6.5(B)",d:"Solve real-world problems to find the whole given a part and the percent."}],
+ CA:[{c:"6.RP.3",d:"Same as CCSS. CA adds emphasis on measurement unit conversion."}],
+ NY:[{c:"6.RP.A.3",d:"Same as CCSS."}]},
+
+// ── 6.NS ──────────────────────────────────────────────────────────────────
+{g:6,d:"NS",cl:"A",clN:"Apply and extend previous understandings of multiplication and division",
+ id:"6.NS.A.1",desc:"Interpret and compute quotients of fractions; solve word problems involving division of fractions by fractions.",
+ nctm:"Grade 6 FP1 · Number and Operations: Completing understanding of division of fractions and extending the notion of number to the system of rational numbers.",
+ FL:[{c:"MA.6.NSO.2.1",d:"Multiply and divide positive fractions, including mixed numbers and fractions greater than 1."},{c:"MA.6.NSO.2.2",d:"Divide fractions by fractions; represent using models, equations, and real-world contexts."}],
+ TX:[{c:"6.2(E)",d:"Extend representations for division to include fraction notation a/b = a ÷ b."},{c:"6.3(E)",d:"Multiply and divide positive rational numbers fluently."}],
+ CA:[{c:"6.NS.1",d:"Same as CCSS."}],
+ NY:[{c:"6.NS.A.1",d:"Same as CCSS."}]},
+
+{g:6,d:"NS",cl:"B",clN:"Compute fluently with multi-digit numbers and fractions",
+ id:"6.NS.B.2",desc:"Fluently divide multi-digit numbers using the standard algorithm.",
+ nctm:"Grade 6 FP1 · Number and Operations: Developing fluency with multi-digit computation.",
+ FL:[{c:"MA.6.NSO.2.3",d:"Solve multi-step real-world problems involving any of the four operations with positive fractions and decimals."}],
+ TX:[{c:"6.3(E)",d:"Multiply and divide positive rational numbers fluently."}],
+ CA:[{c:"6.NS.2",d:"Same as CCSS."}],
+ NY:[{c:"6.NS.B.2",d:"Same as CCSS."}]},
+
+{g:6,d:"NS",cl:"B",clN:"Compute fluently with multi-digit numbers and fractions",
+ id:"6.NS.B.3",desc:"Fluently add, subtract, multiply, and divide multi-digit decimals using the standard algorithm for each operation.",
+ nctm:"Grade 6 FP1 · Number and Operations: Computational fluency with rational numbers.",
+ FL:[{c:"MA.6.NSO.2.3",d:"Solve multi-step real-world problems involving the four operations with positive fractions and decimals."}],
+ TX:[{c:"6.3(D)",d:"Add, subtract, multiply, and divide integers fluently."},{c:"6.3(E)",d:"Multiply and divide positive rational numbers fluently."}],
+ CA:[{c:"6.NS.3",d:"Same as CCSS."}],
+ NY:[{c:"6.NS.B.3",d:"Same as CCSS."}]},
+
+{g:6,d:"NS",cl:"B",clN:"Compute fluently with multi-digit numbers and fractions",
+ id:"6.NS.B.4",desc:"Find the GCF of two whole numbers ≤ 100 and LCM of two whole numbers ≤ 12. Use the distributive property to express a sum with a common factor.",
+ nctm:"Grade 6 FP1 · Number and Operations: Using properties of number — factor and multiple relationships.",
+ FL:[{c:"MA.6.NSO.3.1",d:"Find the Greatest Common Factor (GCF) and the Least Common Multiple (LCM) of two whole numbers."},{c:"MA.6.NSO.3.2",d:"Rewrite the sum of two composite whole numbers with a common factor using the distributive property."}],
+ TX:[{c:"6.7(A)",d:"Generate equivalent numerical expressions using order of operations, integers, prime factorization, and absolute value."}],
+ CA:[{c:"6.NS.4",d:"Same as CCSS."}],
+ NY:[{c:"6.NS.B.4",d:"Same as CCSS."}]},
+
+{g:6,d:"NS",cl:"C",clN:"Apply and extend previous understandings of numbers",
+ id:"6.NS.C.5",desc:"Understand that positive and negative numbers describe quantities having opposite directions or values; use positive and negative numbers in real-world contexts.",
+ nctm:"Grade 6 FP1 · Number and Operations: Extending the number system to include rational numbers — negative numbers in context.",
+ FL:[{c:"MA.6.NSO.1.2",d:"Represent quantities with opposite directions using rational numbers; compare them on a number line using absolute value."}],
+ TX:[{c:"6.2(B)",d:"Identify a number, its opposite, and its absolute value."}],
+ CA:[{c:"6.NS.5",d:"Same as CCSS."}],
+ NY:[{c:"6.NS.C.5",d:"Same as CCSS."}]},
+
+{g:6,d:"NS",cl:"C",clN:"Apply and extend previous understandings of numbers",
+ id:"6.NS.C.6",desc:"Understand a rational number as a point on the number line. Extend number line diagrams and coordinate axes to represent points with negative coordinates. [Sub-standards a–c]",
+ nctm:"Grade 6 FP1 · Number and Operations: Rational numbers as points on the number line; extension to the coordinate plane.",
+ FL:[{c:"MA.6.NSO.1.1",d:"Locate and plot rational numbers on a number line; extend to all four quadrants of the coordinate plane."}],
+ TX:[{c:"6.2(B)",d:"Identify a number, its opposite, and its absolute value."},{c:"6.2(C)",d:"Locate, compare, and order integers and rational numbers using a number line."}],
+ CA:[{c:"6.NS.6",d:"Same as CCSS. CA adds standard 6.NS.6d on absolute value of a rational number as distance from zero."}],
+ NY:[{c:"6.NS.C.6",d:"Same as CCSS."}]},
+
+{g:6,d:"NS",cl:"C",clN:"Apply and extend previous understandings of numbers",
+ id:"6.NS.C.7",desc:"Understand ordering and absolute value of rational numbers. Write, interpret, and explain statements of order for rational numbers in real-world contexts. [Sub-standards a–d]",
+ nctm:"Grade 6 FP1 · Number and Operations: Ordering rational numbers; absolute value as distance.",
+ FL:[{c:"MA.6.NSO.1.2",d:"Represent quantities with opposite directions; compare using absolute value."},{c:"MA.6.NSO.1.3",d:"Interpret the absolute value of a number as the distance from zero on a number line."}],
+ TX:[{c:"6.2(C)",d:"Locate, compare, and order integers and rational numbers using a number line."},{c:"6.2(D)",d:"Order a set of rational numbers arising from mathematical and real-world contexts."}],
+ CA:[{c:"6.NS.7",d:"Same as CCSS."}],
+ NY:[{c:"6.NS.C.7",d:"Same as CCSS."}]},
+
+{g:6,d:"NS",cl:"C",clN:"Apply and extend previous understandings of numbers",
+ id:"6.NS.C.8",desc:"Solve real-world and mathematical problems by graphing points in all four quadrants; use coordinates and absolute value to find distances between points.",
+ nctm:"Grade 6 Connected Topic · Measurement and Geometry: Applying coordinate geometry in the plane.",
+ FL:[{c:"MA.6.GR.1.1",d:"Plot rational number ordered pairs in all four quadrants and on both axes."},{c:"MA.6.GR.1.2",d:"Find distances between ordered pairs with the same x- or y-coordinate on a coordinate plane."}],
+ TX:[{c:"6.11(A)",d:"Graph points in all four quadrants using ordered pairs of rational numbers."}],
+ CA:[{c:"6.NS.8",d:"Same as CCSS."}],
+ NY:[{c:"6.NS.C.8",d:"Same as CCSS."}]},
+
+// ── 6.EE ──────────────────────────────────────────────────────────────────
+{g:6,d:"EE",cl:"A",clN:"Apply and extend previous understandings of arithmetic to algebraic expressions",
+ id:"6.EE.A.1",desc:"Write and evaluate numerical expressions involving whole-number exponents.",
+ nctm:"Grade 6 FP3 · Algebra: Writing, interpreting, and using mathematical expressions and equations — exponent notation.",
+ FL:[{c:"MA.6.NSO.3.3",d:"Evaluate positive rational numbers and integers with natural number exponents."},{c:"MA.6.NSO.3.4",d:"Express composite natural numbers as a product of prime factors with natural number exponents."}],
+ TX:[{c:"6.7(A)",d:"Generate equivalent numerical expressions using order of operations, integers, prime factorization, and absolute value."}],
+ CA:[{c:"6.EE.1",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.A.1",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"A",clN:"Apply and extend previous understandings of arithmetic to algebraic expressions",
+ id:"6.EE.A.2",desc:"Write, read, and evaluate algebraic expressions in which letters stand for numbers. [Sub-standards a–c: write expressions, identify parts, evaluate by substitution]",
+ nctm:"Grade 6 FP3 · Algebra: Writing and evaluating algebraic expressions; understanding variables.",
+ FL:[{c:"MA.6.AR.2.1",d:"Translate written descriptions into algebraic expressions and translate algebraic expressions into written descriptions."},{c:"MA.6.AR.2.3",d:"Evaluate algebraic expressions using substitution and order of operations."}],
+ TX:[{c:"6.7(A)",d:"Generate equivalent numerical expressions using order of operations."},{c:"6.7(B)",d:"Distinguish between expressions and equations verbally, numerically, and algebraically."}],
+ CA:[{c:"6.EE.2",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.A.2",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"A",clN:"Apply and extend previous understandings of arithmetic to algebraic expressions",
+ id:"6.EE.A.3",desc:"Apply the properties of operations to generate equivalent expressions (e.g., distributive property, combining like terms).",
+ nctm:"Grade 6 FP3 · Algebra: Using properties of operations to manipulate and simplify expressions.",
+ FL:[{c:"MA.6.AR.2.4",d:"Apply the properties of operations to generate equivalent algebraic expressions with integer coefficients."}],
+ TX:[{c:"6.7(C)",d:"Determine if two expressions are equivalent using concrete models, pictorial models, and algebraic representations."},{c:"6.7(D)",d:"Generate equivalent expressions using the properties of operations: inverse, identity, commutative, associative, and distributive."}],
+ CA:[{c:"6.EE.3",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.A.3",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"A",clN:"Apply and extend previous understandings of arithmetic to algebraic expressions",
+ id:"6.EE.A.4",desc:"Identify when two expressions are equivalent — they name the same number regardless of which value is substituted into them.",
+ nctm:"Grade 6 FP3 · Algebra: Understanding equivalence of algebraic expressions.",
+ FL:[{c:"MA.6.AR.2.2",d:"Determine whether two algebraic expressions are equivalent using the properties of operations."}],
+ TX:[{c:"6.7(C)",d:"Determine if two expressions are equivalent using models and algebraic representations."}],
+ CA:[{c:"6.EE.4",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.A.4",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"B",clN:"Reason about and solve one-variable equations and inequalities",
+ id:"6.EE.B.5",desc:"Understand solving an equation or inequality as determining which values make it true; use substitution to determine whether a given number makes it true.",
+ nctm:"Grade 6 FP3 · Algebra: Understanding equations as constraints; solution by reasoning.",
+ FL:[{c:"MA.6.AR.3.1",d:"Write and interpret one-variable equations involving addition or subtraction."},{c:"MA.6.AR.3.2",d:"Write and interpret one-variable equations involving multiplication or division."}],
+ TX:[{c:"6.10(A)",d:"Model and solve one-variable, one-step equations and inequalities that represent problems."}],
+ CA:[{c:"6.EE.5",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.B.5",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"B",clN:"Reason about and solve one-variable equations and inequalities",
+ id:"6.EE.B.6",desc:"Use variables to represent numbers and write expressions when solving real-world or mathematical problems; understand a variable can represent an unknown number.",
+ nctm:"Grade 6 FP3 · Algebra: Variables as representations of unknown or changing quantities.",
+ FL:[{c:"MA.6.AR.2.1",d:"Translate written descriptions into algebraic expressions using letters for unknown values."}],
+ TX:[{c:"6.9(A)",d:"Write one-variable, one-step equations and inequalities to represent constraints or conditions within problems."}],
+ CA:[{c:"6.EE.6",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.B.6",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"B",clN:"Reason about and solve one-variable equations and inequalities",
+ id:"6.EE.B.7",desc:"Solve real-world and mathematical problems by writing and solving equations of the form x + p = q and px = q for nonnegative rational numbers.",
+ nctm:"Grade 6 FP3 · Algebra: Solving one-step equations; representing real-world situations algebraically.",
+ FL:[{c:"MA.6.AR.3.1",d:"Write and solve one-variable equations involving addition or subtraction."},{c:"MA.6.AR.3.2",d:"Write and solve one-variable equations involving multiplication or division."},{c:"MA.6.AR.3.3",d:"Determine the unknown decimal or fraction in one-variable equations and write a real-world problem."}],
+ TX:[{c:"6.10(A)",d:"Model and solve one-variable, one-step equations and inequalities."},{c:"6.10(B)",d:"Determine if the given value makes one-variable, one-step equations or inequalities true."}],
+ CA:[{c:"6.EE.7",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.B.7",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"B",clN:"Reason about and solve one-variable equations and inequalities",
+ id:"6.EE.B.8",desc:"Write an inequality of the form x > c or x < c to represent a constraint in a real-world or mathematical problem; represent solutions on a number line.",
+ nctm:"Grade 6 FP3 · Algebra: Inequalities as constraints; solution sets represented on the number line.",
+ FL:[{c:"MA.6.AR.3.5",d:"Represent and interpret a given situation using one-variable inequalities; represent solutions algebraically or graphically on a number line."}],
+ TX:[{c:"6.9(B)",d:"Represent solutions for one-variable, one-step equations and inequalities on number lines."}],
+ CA:[{c:"6.EE.8",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.B.8",d:"Same as CCSS."}]},
+
+{g:6,d:"EE",cl:"C",clN:"Represent and analyze quantitative relationships between dependent and independent variables",
+ id:"6.EE.C.9",desc:"Use variables to represent two quantities in a real-world problem that change in relationship to one another; write an equation to express the dependent variable in terms of the independent variable.",
+ nctm:"Grade 6 FP3 · Algebra: Understanding functional relationships — dependent and independent variables.",
+ FL:[{c:"MA.6.AR.3.4",d:"Write two-variable equations to represent relationships between quantities from a graph or a written description."}],
+ TX:[{c:"6.6(A)",d:"Identify independent and dependent quantities from tables and graphs."},{c:"6.6(B)",d:"Write an equation representing the relationship between independent and dependent quantities."},{c:"6.6(C)",d:"Represent a situation using verbal descriptions, tables, graphs, and equations in the form y = kx or y = x + b."}],
+ CA:[{c:"6.EE.9",d:"Same as CCSS."}],
+ NY:[{c:"6.EE.C.9",d:"Same as CCSS."}]},
+
+// ── 6.G ──────────────────────────────────────────────────────────────────
+{g:6,d:"G",cl:"A",clN:"Solve real-world and mathematical problems involving area, surface area, and volume",
+ id:"6.G.A.1",desc:"Find the area of right triangles, other triangles, special quadrilaterals, and polygons by composing into rectangles or decomposing into triangles and other shapes.",
+ nctm:"Grade 6 Connected Topic · Measurement and Geometry: Area formulas derived through composition and decomposition.",
+ FL:[{c:"MA.6.GR.2.1",d:"Derive a formula for the area of a right triangle using a rectangle; apply a formula to find the area of a triangle."},{c:"MA.6.GR.2.2",d:"Solve problems involving area of quadrilaterals and composite figures by decomposing them."}],
+ TX:[{c:"6.8(B)",d:"Model area formulas for parallelograms, trapezoids, and triangles by decomposing and rearranging parts of these shapes."},{c:"6.8(D)",d:"Determine solutions for problems involving area of rectangles, parallelograms, trapezoids, and triangles."}],
+ CA:[{c:"6.G.1",d:"Same as CCSS."}],
+ NY:[{c:"6.G.A.1",d:"Same as CCSS."}]},
+
+{g:6,d:"G",cl:"A",clN:"Solve real-world and mathematical problems involving area, surface area, and volume",
+ id:"6.G.A.2",desc:"Find the volume of a right rectangular prism with fractional edge lengths; show the volume is the same as multiplying the edge lengths of the prism.",
+ nctm:"Grade 6 Connected Topic · Measurement and Geometry: Volume of prisms — fractional dimensions.",
+ FL:[{c:"MA.6.GR.2.3",d:"Solve problems involving the volume of right rectangular prisms with positive rational number edge lengths."}],
+ TX:[{c:"6.8(D)",d:"Determine solutions for problems involving volume of right rectangular prisms where dimensions are positive rational numbers."}],
+ CA:[{c:"6.G.2",d:"Same as CCSS."}],
+ NY:[{c:"6.G.A.2",d:"Same as CCSS."}]},
+
+{g:6,d:"G",cl:"A",clN:"Solve real-world and mathematical problems involving area, surface area, and volume",
+ id:"6.G.A.3",desc:"Draw polygons in the coordinate plane given coordinates for the vertices; use coordinates to find the length of a side joining points with the same first or second coordinate.",
+ nctm:"Grade 6 Connected Topic · Measurement and Geometry: Applying coordinate geometry to find distances and perimeters.",
+ FL:[{c:"MA.6.GR.1.3",d:"Solve problems by plotting points on a coordinate plane, including finding the perimeter or area of a rectangle."}],
+ TX:[{c:"6.11(A)",d:"Graph points in all four quadrants using ordered pairs of rational numbers."}],
+ CA:[{c:"6.G.3",d:"Same as CCSS."}],
+ NY:[{c:"6.G.A.3",d:"Same as CCSS."}]},
+
+{g:6,d:"G",cl:"A",clN:"Solve real-world and mathematical problems involving area, surface area, and volume",
+ id:"6.G.A.4",desc:"Represent three-dimensional figures using nets made up of rectangles and triangles; use the nets to find the surface area of these figures.",
+ nctm:"Grade 6 Connected Topic · Measurement and Geometry: Surface area of 3D figures using nets.",
+ FL:[{c:"MA.6.GR.2.4",d:"Find the surface area of right rectangular prisms and right rectangular pyramids using the figure's net."}],
+ TX:[{c:"6.8(C)",d:"Write equations related to the area of rectangles, parallelograms, trapezoids, and triangles and volume of right rectangular prisms (includes surface area via nets)."}],
+ CA:[{c:"6.G.4",d:"Same as CCSS."}],
+ NY:[{c:"6.G.A.4",d:"Same as CCSS."}]},
+
+// ── 6.SP ──────────────────────────────────────────────────────────────────
+{g:6,d:"SP",cl:"A",clN:"Develop understanding of statistical variability",
+ id:"6.SP.A.1",desc:"Recognize a statistical question as one that anticipates variability in the data related to the question and accounts for it in the answers.",
+ nctm:"Grade 6 Connected Topic · Statistics: Understanding statistical reasoning — distinguishing statistical from non-statistical questions.",
+ FL:[{c:"MA.6.DP.1.1",d:"Recognize and formulate a statistical question that would generate numerical data."}],
+ TX:[{c:"6.12(A)",d:"Represent numeric data graphically, including dot plots, stem-and-leaf plots, histograms, and box plots (implies understanding of what generates data)."}],
+ CA:[{c:"6.SP.1",d:"Same as CCSS."}],
+ NY:[{c:"6.SP.A.1",d:"Same as CCSS."}]},
+
+{g:6,d:"SP",cl:"A",clN:"Develop understanding of statistical variability",
+ id:"6.SP.A.2",desc:"Understand that a set of data collected to answer a statistical question has a distribution which can be described by its center, spread, and overall shape.",
+ nctm:"Grade 6 Connected Topic · Statistics: Distribution — describing data by center, spread, and shape.",
+ FL:[{c:"MA.6.DP.1.2",d:"Find and interpret mean, median, mode, and range within a real-world context."},{c:"MA.6.DP.1.4",d:"Given a histogram or line plot, qualitatively assess and interpret the data distribution."}],
+ TX:[{c:"6.12(A)",d:"Represent numeric data graphically."},{c:"6.12(B)",d:"Use the graphical representation of numeric data to describe the center, spread, and shape of the data distribution."}],
+ CA:[{c:"6.SP.2",d:"Same as CCSS."}],
+ NY:[{c:"6.SP.A.2",d:"Same as CCSS."}]},
+
+{g:6,d:"SP",cl:"A",clN:"Develop understanding of statistical variability",
+ id:"6.SP.A.3",desc:"Recognize that a measure of center summarizes all values with a single number, while a measure of variation describes how its values vary with a single number.",
+ nctm:"Grade 6 Connected Topic · Statistics: Measures of center vs. measures of spread — mean, median, range, MAD.",
+ FL:[{c:"MA.6.DP.1.2",d:"Find and interpret mean, median, mode, and range."},{c:"MA.6.DP.1.6",d:"Describe how changes in data values impact measures of center and variation."}],
+ TX:[{c:"6.12(C)",d:"Summarize numeric data sets with mean, median, range, and IQR and use these to describe center, spread, and shape."}],
+ CA:[{c:"6.SP.3",d:"Same as CCSS."}],
+ NY:[{c:"6.SP.A.3",d:"Same as CCSS."}]},
+
+{g:6,d:"SP",cl:"B",clN:"Summarize and describe distributions",
+ id:"6.SP.B.4",desc:"Display numerical data in plots on a number line, including dot plots, histograms, and box plots.",
+ nctm:"Grade 6 Connected Topic · Statistics: Graphical representations of data distributions.",
+ FL:[{c:"MA.6.DP.1.3",d:"Given a box plot, determine minimum, lower quartile, median, upper quartile, and maximum."},{c:"MA.6.DP.1.4",d:"Given a histogram or line plot, assess and interpret the data distribution."},{c:"MA.6.DP.1.5",d:"Create box plots and histograms to represent sets of numerical data."}],
+ TX:[{c:"6.12(A)",d:"Represent numeric data graphically including dot plots, stem-and-leaf plots, histograms, and box plots."}],
+ CA:[{c:"6.SP.4",d:"Same as CCSS."}],
+ NY:[{c:"6.SP.B.4",d:"Same as CCSS."}]},
+
+{g:6,d:"SP",cl:"B",clN:"Summarize and describe distributions",
+ id:"6.SP.B.5",desc:"Summarize numerical data sets: report observations, describe the attribute, give quantitative measures of center and variability, relate choices to shape and context. [Sub-standards a–d]",
+ nctm:"Grade 6 Connected Topic · Statistics: Summarizing data with measures of center and variability; connecting to distribution shape.",
+ FL:[{c:"MA.6.DP.1.2",d:"Find and interpret mean, median, mode, and range."},{c:"MA.6.DP.1.3",d:"Determine minimum, quartiles, and maximum from a box plot."},{c:"MA.6.DP.1.6",d:"Describe how changes in data values impact measures of center and variation."}],
+ TX:[{c:"6.12(A)",d:"Represent numeric data graphically."},{c:"6.12(B)",d:"Use graphical representations to describe center, spread, and shape."},{c:"6.12(C)",d:"Summarize numeric data sets with mean, median, range, and IQR."}],
+ CA:[{c:"6.SP.5",d:"Same as CCSS."}],
+ NY:[{c:"6.SP.B.5",d:"Same as CCSS."}]},
+
+// ════════════════════════════════════ GRADE 7 ════════════════════════════════
+// ── 7.RP ──────────────────────────────────────────────────────────────────
+{g:7,d:"RP",cl:"A",clN:"Analyze proportional relationships and use them to solve real-world and mathematical problems",
+ id:"7.RP.A.1",desc:"Compute unit rates associated with ratios of fractions, including ratios of lengths, areas and other quantities measured in like or different units.",
+ nctm:"Grade 7 FP1 · Number and Operations & Algebra & Geometry: Developing an understanding of and applying proportionality — unit rates with fractional quantities.",
+ FL:[{c:"MA.7.AR.4.1",d:"Determine whether two quantities have a proportional relationship by examining a table, graph, or written description."},{c:"MA.7.AR.4.2",d:"Determine the constant of proportionality within a mathematical or real-world context."}],
+ TX:[{c:"7.4(B)",d:"Calculate unit rates from rates in mathematical and real-world problems."}],
+ CA:[{c:"7.RP.1",d:"Same as CCSS."}],
+ NY:[{c:"7.RP.A.1",d:"Same as CCSS."}]},
+
+{g:7,d:"RP",cl:"A",clN:"Analyze proportional relationships and use them to solve real-world and mathematical problems",
+ id:"7.RP.A.2",desc:"Recognize and represent proportional relationships between quantities. Decide if proportional; identify constant of proportionality; represent proportional relationships by equations; explain points on graphs. [Sub-standards a–d]",
+ nctm:"Grade 7 FP1 · Number and Operations & Algebra & Geometry: Representing proportional relationships algebraically and graphically; constant of proportionality.",
+ FL:[{c:"MA.7.AR.4.1",d:"Determine whether two quantities have a proportional relationship."},{c:"MA.7.AR.4.2",d:"Determine the constant of proportionality."},{c:"MA.7.AR.4.3",d:"Graph proportional relationships from a table, equation, or written description."},{c:"MA.7.AR.4.4",d:"Translate any representation of a proportional relationship to a written description, table, or equation."}],
+ TX:[{c:"7.4(A)",d:"Represent constant rates of change in problems given pictorial, tabular, verbal, numeric, graphical, and algebraic representations including d = rt."},{c:"7.4(C)",d:"Determine the constant of proportionality (k = y/x) within problems."},{c:"7.4(D)",d:"Solve problems involving ratios, rates, and percents."}],
+ CA:[{c:"7.RP.2",d:"Same as CCSS."}],
+ NY:[{c:"7.RP.A.2",d:"Same as CCSS."}]},
+
+{g:7,d:"RP",cl:"A",clN:"Analyze proportional relationships and use them to solve real-world and mathematical problems",
+ id:"7.RP.A.3",desc:"Use proportional relationships to solve multistep ratio and percent problems: simple interest, tax, markups/markdowns, gratuities, commissions, fees, percent increase/decrease, percent error.",
+ nctm:"Grade 7 FP1 · Number and Operations & Algebra & Geometry: Applying proportionality to percent problems in real-world contexts.",
+ FL:[{c:"MA.7.AR.3.1",d:"Apply previous understanding of percentages and ratios to solve multi-step real-world percent problems."},{c:"MA.7.AR.3.2",d:"Apply previous understanding of ratios to solve real-world problems involving proportions."},{c:"MA.7.AR.4.5",d:"Solve real-world problems involving proportional relationships."}],
+ TX:[{c:"7.4(D)",d:"Solve problems involving ratios, rates, and percents, including multi-step problems involving percent increase and percent decrease."},{c:"7.4(E)",d:"Convert between measurement systems, including the use of proportions and the use of unit rates."}],
+ CA:[{c:"7.RP.3",d:"Same as CCSS."}],
+ NY:[{c:"7.RP.A.3",d:"Same as CCSS."}]},
+
+// ── 7.NS ──────────────────────────────────────────────────────────────────
+{g:7,d:"NS",cl:"A",clN:"Apply and extend previous understandings of operations with fractions",
+ id:"7.NS.A.1",desc:"Apply and extend previous understandings of addition and subtraction to add and subtract rational numbers; represent on a number line. [Sub-standards a–d: properties, vectors, distance, real-world]",
+ nctm:"Grade 7 FP3 · Number and Operations & Algebra: Developing understanding of operations on all rational numbers — addition and subtraction including negatives.",
+ FL:[{c:"MA.7.NSO.1.2",d:"Rewrite rational numbers in different but equivalent forms (fractions, mixed numbers, repeating decimals, percentages) to solve problems."},{c:"MA.7.AR.2.2",d:"Write and solve two-step equations in one variable with all rational-number terms (implicitly requires operations on rationals)."}],
+ TX:[{c:"7.3(A)",d:"Add, subtract, multiply, and divide rational numbers fluently."},{c:"7.3(B)",d:"Apply and extend previous understandings of operations to solve problems using addition, subtraction, multiplication, and division of rational numbers."}],
+ CA:[{c:"7.NS.1",d:"Same as CCSS."}],
+ NY:[{c:"7.NS.A.1",d:"Same as CCSS."}]},
+
+{g:7,d:"NS",cl:"A",clN:"Apply and extend previous understandings of operations with fractions",
+ id:"7.NS.A.2",desc:"Apply and extend previous understandings of multiplication and division to multiply and divide rational numbers. [Sub-standards a–d: properties, rules for signs, quotients as fractions, decimals]",
+ nctm:"Grade 7 FP3 · Number and Operations & Algebra: Multiplication and division of rational numbers — sign rules and properties.",
+ FL:[{c:"MA.7.NSO.1.1",d:"Apply the Laws of Exponents to evaluate and generate equivalent numerical expressions with whole-number exponents and rational number bases."},{c:"MA.7.NSO.1.2",d:"Rewrite rational numbers in different but equivalent forms."}],
+ TX:[{c:"7.3(A)",d:"Add, subtract, multiply, and divide rational numbers fluently."},{c:"7.3(B)",d:"Apply and extend previous understandings to solve problems using multiplication and division of rational numbers."}],
+ CA:[{c:"7.NS.2",d:"Same as CCSS."}],
+ NY:[{c:"7.NS.A.2",d:"Same as CCSS."}]},
+
+{g:7,d:"NS",cl:"A",clN:"Apply and extend previous understandings of operations with fractions",
+ id:"7.NS.A.3",desc:"Solve real-world and mathematical problems involving the four operations with rational numbers.",
+ nctm:"Grade 7 FP3 · Number and Operations & Algebra: Applying operations on rational numbers to solve real-world problems.",
+ FL:[{c:"MA.7.AR.3.1",d:"Apply percentages and ratios to solve multi-step real-world problems."},{c:"MA.7.AR.3.2",d:"Apply previous understanding of ratios to solve real-world problems."}],
+ TX:[{c:"7.3(B)",d:"Apply and extend previous understandings of operations to solve real-world problems using rational numbers."}],
+ CA:[{c:"7.NS.3",d:"Same as CCSS."}],
+ NY:[{c:"7.NS.A.3",d:"Same as CCSS."}]},
+
+// ── 7.EE ──────────────────────────────────────────────────────────────────
+{g:7,d:"EE",cl:"A",clN:"Use properties of operations to generate equivalent expressions",
+ id:"7.EE.A.1",desc:"Apply properties of operations as strategies to add, subtract, factor, and expand linear expressions with rational coefficients.",
+ nctm:"Grade 7 FP3 · Number and Operations & Algebra: Extending properties of operations to linear expressions with rational coefficients.",
+ FL:[{c:"MA.7.AR.1.1",d:"Apply properties of operations to add and subtract linear expressions with rational coefficients."}],
+ TX:[{c:"7.7(A)",d:"Represent linear relationships using verbal descriptions, tables, graphs, and rules in the form y = kx + b."}],
+ CA:[{c:"7.EE.1",d:"Same as CCSS."}],
+ NY:[{c:"7.EE.A.1",d:"Same as CCSS."}]},
+
+{g:7,d:"EE",cl:"A",clN:"Use properties of operations to generate equivalent expressions",
+ id:"7.EE.A.2",desc:"Understand that rewriting an expression in different forms can shed light on the problem and how the quantities in it are related.",
+ nctm:"Grade 7 FP3 · Number and Operations & Algebra: Equivalent forms of expressions reveal structure and relationships.",
+ FL:[{c:"MA.7.AR.1.2",d:"Determine whether two linear expressions are equivalent."}],
+ TX:[{c:"7.7(A)",d:"Represent linear relationships using various forms (verbal, tabular, graphical, algebraic)."}],
+ CA:[{c:"7.EE.2",d:"Same as CCSS."}],
+ NY:[{c:"7.EE.A.2",d:"Same as CCSS."}]},
+
+{g:7,d:"EE",cl:"B",clN:"Solve real-life and mathematical problems using numerical and algebraic expressions and equations",
+ id:"7.EE.B.3",desc:"Solve multi-step real-life and mathematical problems posed with positive and negative rational numbers in any form, using tools strategically; assess reasonableness of answers.",
+ nctm:"Grade 7 FP3 · Number and Operations & Algebra: Multi-step problem solving with all rational numbers.",
+ FL:[{c:"MA.7.AR.3.1",d:"Solve multi-step real-world percent problems."},{c:"MA.7.AR.3.2",d:"Solve real-world problems involving proportions."},{c:"MA.7.AR.3.3",d:"Solve problems involving unit conversion across different measurement systems."}],
+ TX:[{c:"7.3(B)",d:"Apply and extend previous understandings of operations to solve real-world problems with rational numbers."}],
+ CA:[{c:"7.EE.3",d:"Same as CCSS."}],
+ NY:[{c:"7.EE.B.3",d:"Same as CCSS."}]},
+
+{g:7,d:"EE",cl:"B",clN:"Solve real-life and mathematical problems using numerical and algebraic expressions and equations",
+ id:"7.EE.B.4",desc:"Use variables to represent quantities in a real-world or mathematical problem; construct simple equations and inequalities to solve problems by reasoning about the quantities. [Sub-standards a–b: equations & inequalities]",
+ nctm:"Grade 7 FP3 · Number and Operations & Algebra: Writing and solving linear equations and inequalities from real-world contexts.",
+ FL:[{c:"MA.7.AR.2.1",d:"Write and solve one-step inequalities in one variable within a mathematical context."},{c:"MA.7.AR.2.2",d:"Write and solve two-step equations in one variable where all terms are rational numbers."}],
+ TX:[{c:"7.10(A)",d:"Write one-variable, two-step equations and inequalities to represent constraints or conditions within problems."},{c:"7.11(A)",d:"Model and solve one-variable, two-step equations and inequalities."}],
+ CA:[{c:"7.EE.4",d:"Same as CCSS."}],
+ NY:[{c:"7.EE.B.4",d:"Same as CCSS."}]},
+
+// ── 7.G ──────────────────────────────────────────────────────────────────
+{g:7,d:"G",cl:"A",clN:"Draw, construct, and describe geometrical figures",
+ id:"7.G.A.1",desc:"Solve problems involving scale drawings of geometric figures, including computing actual lengths and areas from a scale drawing and reproducing a scale drawing at a different scale.",
+ nctm:"Grade 7 FP1 · Number and Operations & Algebra & Geometry: Applying proportionality to scale drawings and geometric similarity.",
+ FL:[{c:"MA.7.GR.1.5",d:"Solve problems involving dimensions and areas of geometric figures, including scale drawings and scale factors."}],
+ TX:[{c:"7.5(A)",d:"Generalize the critical attributes of similarity, including ratios within and between similar shapes."},{c:"7.5(C)",d:"Solve mathematical and real-world problems involving similar shapes and scale drawings."}],
+ CA:[{c:"7.G.1",d:"Same as CCSS."}],
+ NY:[{c:"7.G.A.1",d:"Same as CCSS."}]},
+
+{g:7,d:"G",cl:"A",clN:"Draw, construct, and describe geometrical figures",
+ id:"7.G.A.2",desc:"Draw geometric shapes with given conditions. Focus on triangles — noticing when conditions determine a unique triangle, more than one triangle, or no triangle.",
+ nctm:"Grade 7 FP1 · Number and Operations & Algebra & Geometry: Reasoning about conditions for triangles.",
+ FL:[{c:"MA.7.GR.1.1",d:"Apply formulas to find areas of trapezoids, parallelograms, and rhombi (related triangle reasoning)."},{c:"MA.7.GR.1.2",d:"Solve problems involving area of polygons or composite figures by decomposing into triangles or quadrilaterals."}],
+ TX:[{c:"7.5(B)",d:"Describe π as the ratio of circumference of a circle to its diameter; and model methods for approximating the value of π."}],
+ CA:[{c:"7.G.2",d:"Same as CCSS."}],
+ NY:[{c:"7.G.A.2",d:"Same as CCSS."}]},
+
+{g:7,d:"G",cl:"A",clN:"Draw, construct, and describe geometrical figures",
+ id:"7.G.A.3",desc:"Describe the two-dimensional figures that result from slicing three-dimensional figures, as in plane sections of right rectangular prisms and right rectangular pyramids.",
+ nctm:"Grade 7 FP2 · Measurement & Geometry & Algebra: Analyzing cross-sections of 3D figures.",
+ FL:[{c:"MA.7.GR.2.1",d:"Given a three-dimensional figure, identify the two-dimensional figures that represent a cross-section."}],
+ TX:[{c:"",d:"No direct equivalent in TEKS Grade 7. Cross-sections are not explicitly addressed."}],
+ CA:[{c:"7.G.3",d:"Same as CCSS."}],
+ NY:[{c:"7.G.A.3",d:"Same as CCSS."}]},
+
+{g:7,d:"G",cl:"B",clN:"Solve real-life and mathematical problems involving angle measure, area, surface area, and volume",
+ id:"7.G.B.4",desc:"Know the formulas for the area and circumference of a circle and use them to solve problems; give an informal derivation of the relationship between circumference and area of a circle.",
+ nctm:"Grade 7 FP2 · Measurement & Geometry & Algebra: Deriving and applying formulas for circles — circumference and area.",
+ FL:[{c:"MA.7.GR.1.3",d:"Explore the proportional relationship between circumference and diameter; apply a formula for circumference of a circle."},{c:"MA.7.GR.1.4",d:"Explore and apply a formula to find the area of a circle."}],
+ TX:[{c:"7.5(B)",d:"Describe π as the ratio of circumference to diameter."},{c:"7.9(B)",d:"Determine the circumference and area of circles."}],
+ CA:[{c:"7.G.4",d:"Same as CCSS."}],
+ NY:[{c:"7.G.B.4",d:"Same as CCSS."}]},
+
+{g:7,d:"G",cl:"B",clN:"Solve real-life and mathematical problems involving angle measure, area, surface area, and volume",
+ id:"7.G.B.5",desc:"Use facts about supplementary, complementary, vertical, and adjacent angles in a multi-step problem to write and solve simple equations for an unknown angle.",
+ nctm:"Grade 7 FP2 · Measurement & Geometry & Algebra: Using angle relationships to write and solve equations.",
+ FL:[{c:"MA.7.GR.1.2",d:"Solve problems involving area of polygons or composite figures (related geometry reasoning)."},{c:"",d:"Note: Angle relationships are addressed more explicitly in FL BEST Grade 8 (MA.8.GR.1.4)."}],
+ TX:[{c:"7.11(C)",d:"Write and solve equations using geometry concepts, including the sum of angles in a triangle."}],
+ CA:[{c:"7.G.5",d:"Same as CCSS."}],
+ NY:[{c:"7.G.B.5",d:"Same as CCSS."}]},
+
+{g:7,d:"G",cl:"B",clN:"Solve real-life and mathematical problems involving angle measure, area, surface area, and volume",
+ id:"7.G.B.6",desc:"Solve real-world and mathematical problems involving area, volume, and surface area of two- and three-dimensional objects composed of triangles, quadrilaterals, polygons, cubes, and right prisms.",
+ nctm:"Grade 7 FP2 · Measurement & Geometry & Algebra: Applying formulas for area, surface area, and volume of composite figures.",
+ FL:[{c:"MA.7.GR.1.1",d:"Apply formulas to find areas of trapezoids, parallelograms, and rhombi."},{c:"MA.7.GR.1.2",d:"Solve problems involving area of polygons or composite figures."},{c:"MA.7.GR.2.2",d:"Solve real-world problems involving surface area of cylinders, rectangular prisms, and composite figures."},{c:"MA.7.GR.2.3",d:"Solve problems involving volume of right circular cylinders and rectangular prisms."}],
+ TX:[{c:"7.8(A)",d:"Solve problems involving the volume of rectangular prisms, triangular prisms, rectangular pyramids, and triangular pyramids."},{c:"7.9(A)",d:"Solve problems involving the lateral and total surface area of rectangular prisms and triangular prisms."}],
+ CA:[{c:"7.G.6",d:"Same as CCSS."}],
+ NY:[{c:"7.G.B.6",d:"Same as CCSS."}]},
+
+// ── 7.SP ──────────────────────────────────────────────────────────────────
+{g:7,d:"SP",cl:"A",clN:"Use random sampling to draw inferences about a population",
+ id:"7.SP.A.1",desc:"Understand that statistics can be used to gain information about a population by examining a sample; understand that random sampling tends to produce representative samples.",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Sampling and inference — random sampling as the basis for valid generalizations.",
+ FL:[{c:"MA.7.DP.1.3",d:"Given categorical data from a random sample, use proportional relationships to make predictions about a population."}],
+ TX:[{c:"7.6(G)",d:"Solve problems using data incorporated in bar graphs, dot plots, and circle graphs, including part-to-whole and part-to-part comparisons."}],
+ CA:[{c:"7.SP.1",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.A.1",d:"Same as CCSS."}]},
+
+{g:7,d:"SP",cl:"A",clN:"Use random sampling to draw inferences about a population",
+ id:"7.SP.A.2",desc:"Use data from a random sample to draw inferences about a population with an unknown characteristic of interest; generate multiple samples to gauge variation in estimates.",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Using sample data to make inferences about a population.",
+ FL:[{c:"MA.7.DP.1.3",d:"Use proportional relationships from random sample data to make predictions about a population."}],
+ TX:[{c:"7.6(G)",d:"Solve problems using data from bar graphs, dot plots, and circle graphs."}],
+ CA:[{c:"7.SP.2",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.A.2",d:"Same as CCSS."}]},
+
+{g:7,d:"SP",cl:"B",clN:"Draw informal comparative inferences about two populations",
+ id:"7.SP.B.3",desc:"Informally assess the degree of visual overlap of two numerical data distributions with similar variabilities, measuring the difference between the centers as a multiple of a measure of variability.",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Comparing data distributions using measures of center and spread.",
+ FL:[{c:"MA.7.DP.1.1",d:"Determine an appropriate measure of center or variability to summarize numerical data, taking into account shape and context."},{c:"MA.7.DP.1.2",d:"Use measures of center and variability to compare two data sets, interpret results, and draw conclusions."}],
+ TX:[{c:"7.12(A)",d:"Compare two groups of numeric data using comparative dot plots or box plots by comparing their shapes, centers, and spreads."}],
+ CA:[{c:"7.SP.3",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.B.3",d:"Same as CCSS."}]},
+
+{g:7,d:"SP",cl:"B",clN:"Draw informal comparative inferences about two populations",
+ id:"7.SP.B.4",desc:"Use measures of center and measures of variability for numerical data from random samples to draw informal comparative inferences about two populations.",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Informal inference from two data sets using summary statistics.",
+ FL:[{c:"MA.7.DP.1.1",d:"Determine appropriate measures of center or variability."},{c:"MA.7.DP.1.2",d:"Compare two numerical or graphical data sets and draw conclusions about two populations."}],
+ TX:[{c:"7.12(A)",d:"Compare two groups of numeric data using comparative dot plots or box plots."}],
+ CA:[{c:"7.SP.4",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.B.4",d:"Same as CCSS."}]},
+
+{g:7,d:"SP",cl:"C",clN:"Investigate chance processes and develop, use, and evaluate probability models",
+ id:"7.SP.C.5",desc:"Understand that the probability of a chance event is a number between 0 and 1 that expresses the likelihood of the event occurring.",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Probability as a numerical measure of likelihood.",
+ FL:[{c:"MA.7.DP.2.2",d:"Given the probability of a chance event, interpret the likelihood of it occurring. Compare probabilities of chance events."}],
+ TX:[{c:"7.6(A)",d:"Represent sample spaces for simple and compound events using lists and tree diagrams."}],
+ CA:[{c:"7.SP.5",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.C.5",d:"Same as CCSS."}]},
+
+{g:7,d:"SP",cl:"C",clN:"Investigate chance processes and develop, use, and evaluate probability models",
+ id:"7.SP.C.6",desc:"Approximate the probability of a chance event by collecting data on the chance process; observe long-run relative frequency and predict approximate frequency given probability.",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Experimental probability and long-run relative frequency.",
+ FL:[{c:"MA.7.DP.2.4",d:"Use a simulation of a simple experiment to find experimental probabilities and compare them to theoretical probabilities."}],
+ TX:[{c:"7.6(B)",d:"Select and use different simulations to represent simple and compound events with and without technology."},{c:"7.6(C)",d:"Make predictions and determine solutions using experimental data for simple and compound events."}],
+ CA:[{c:"7.SP.6",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.C.6",d:"Same as CCSS."}]},
+
+{g:7,d:"SP",cl:"C",clN:"Investigate chance processes and develop, use, and evaluate probability models",
+ id:"7.SP.C.7",desc:"Develop a probability model and use it to find probabilities of events. Compare probabilities from a model to observed frequencies; explain possible sources of discrepancy. [Sub-standards a–b: uniform & non-uniform models]",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Theoretical probability models; comparing to observed data.",
+ FL:[{c:"MA.7.DP.2.1",d:"Determine the sample space for a simple experiment."},{c:"MA.7.DP.2.3",d:"Find the theoretical probability of an event related to a simple experiment."}],
+ TX:[{c:"7.6(I)",d:"Determine experimental and theoretical probabilities related to simple and compound events using data and sample spaces."},{c:"7.6(C)",d:"Make predictions and determine solutions using experimental data."}],
+ CA:[{c:"7.SP.7",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.C.7",d:"Same as CCSS."}]},
+
+{g:7,d:"SP",cl:"C",clN:"Investigate chance processes and develop, use, and evaluate probability models",
+ id:"7.SP.C.8",desc:"Find probabilities of compound events using organized lists, tables, tree diagrams, and simulation. [Sub-standards a–c: sample space, probability of compound events, simulation]",
+ nctm:"Grade 7 Connected Topic · Statistics and Probability: Compound events — organized counting and simulation.",
+ FL:[{c:"MA.8.DP.2.1",d:"Determine the sample space for a compound event using organized lists, tables, and tree diagrams. (Note: FL BEST addresses compound events in Grade 8.)"},{c:"MA.8.DP.2.2",d:"Find the theoretical probability of compound events."}],
+ TX:[{c:"7.6(D)",d:"Make predictions and determine solutions using theoretical probability for simple and compound events."},{c:"7.6(H)",d:"Find probabilities of a simple event and its complement and describe the relationship between the two."}],
+ CA:[{c:"7.SP.8",d:"Same as CCSS."}],
+ NY:[{c:"7.SP.C.8",d:"Same as CCSS."}]},
+
+// ════════════════════════════════════ GRADE 8 ════════════════════════════════
+// ── 8.NS ──────────────────────────────────────────────────────────────────
+{g:8,d:"NS",cl:"A",clN:"Know that there are numbers that are not rational, and approximate them by rational numbers",
+ id:"8.NS.A.1",desc:"Know that numbers that are not rational are called irrational; understand that every number has a decimal expansion; convert a repeating decimal into a rational number.",
+ nctm:"Grade 8 Connected Topic · Number and Operations: Extending the number system to include irrational numbers; the real number line.",
+ FL:[{c:"MA.8.NSO.1.1",d:"Extend previous understanding of rational numbers to define irrational numbers within the real number system. Locate an approximation of an irrational number on a number line."}],
+ TX:[{c:"8.2(A)",d:"Extend previous knowledge of sets and subsets using a visual representation to describe relationships between sets of real numbers."}],
+ CA:[{c:"8.NS.1",d:"Same as CCSS."}],
+ NY:[{c:"8.NS.A.1",d:"Same as CCSS."}]},
+
+{g:8,d:"NS",cl:"A",clN:"Know that there are numbers that are not rational, and approximate them by rational numbers",
+ id:"8.NS.A.2",desc:"Use rational approximations of irrational numbers to compare their size, locate them on a number line, and estimate the value of expressions.",
+ nctm:"Grade 8 Connected Topic · Number and Operations: Approximating irrational numbers; placing them on the number line.",
+ FL:[{c:"MA.8.NSO.1.1",d:"Locate an approximation of an irrational number on a number line."},{c:"MA.8.NSO.1.2",d:"Plot, order, and compare rational and irrational numbers represented in various forms."}],
+ TX:[{c:"8.2(B)",d:"Approximate the value of an irrational number, including π and square roots of numbers less than 225, and locate that rational number approximation on a number line."}],
+ CA:[{c:"8.NS.2",d:"Same as CCSS."}],
+ NY:[{c:"8.NS.A.2",d:"Same as CCSS."}]},
+
+// ── 8.EE ──────────────────────────────────────────────────────────────────
+{g:8,d:"EE",cl:"A",clN:"Work with radicals and integer exponents",
+ id:"8.EE.A.1",desc:"Know and apply the properties of integer exponents to generate equivalent numerical expressions.",
+ nctm:"Grade 8 FP1 · Algebra: Properties of integer exponents as foundational to working with linear and exponential functions.",
+ FL:[{c:"MA.8.AR.1.1",d:"Apply the Laws of Exponents to generate equivalent numerical and algebraic expressions, limited to integer exponents and rational number bases."}],
+ TX:[{c:"8.2(C)",d:"Convert between standard decimal notation and scientific notation. (Exponent rules established in earlier grades; TEKS 7.2 covers Laws of Exponents.)"},{c:"7.2(A)",d:"Extend previous knowledge of sets and subsets using visual representations — Laws of Exponents with integer exponents."}],
+ CA:[{c:"8.EE.1",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.A.1",d:"Same as CCSS."}]},
+
+{g:8,d:"EE",cl:"A",clN:"Work with radicals and integer exponents",
+ id:"8.EE.A.2",desc:"Use square root and cube root symbols to represent solutions to equations x² = p and x³ = p. Evaluate square roots of small perfect squares and cube roots of small perfect cubes. Know that √2 is irrational.",
+ nctm:"Grade 8 FP1 · Algebra: Square roots and cube roots; irrational solutions.",
+ FL:[{c:"MA.8.NSO.1.1",d:"Define irrational numbers including non-perfect square roots; locate approximations on a number line."}],
+ TX:[{c:"8.2(B)",d:"Approximate the value of an irrational number, including square roots; locate on a number line."}],
+ CA:[{c:"8.EE.2",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.A.2",d:"Same as CCSS."}]},
+
+{g:8,d:"EE",cl:"A",clN:"Work with radicals and integer exponents",
+ id:"8.EE.A.3",desc:"Use numbers expressed as a single digit times an integer power of 10 to estimate very large or very small quantities; express how many times as much one is than the other.",
+ nctm:"Grade 8 FP1 · Algebra: Scientific notation as an application of properties of integer exponents.",
+ FL:[{c:"MA.7.NSO.1.1",d:"Apply the Laws of Exponents with integer exponents and rational number bases (scientific notation is an application; partially addressed in Grade 7 FL BEST)."}],
+ TX:[{c:"8.2(C)",d:"Convert between standard decimal notation and scientific notation."}],
+ CA:[{c:"8.EE.3",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.A.3",d:"Same as CCSS."}]},
+
+{g:8,d:"EE",cl:"A",clN:"Work with radicals and integer exponents",
+ id:"8.EE.A.4",desc:"Perform operations with numbers expressed in scientific notation; use scientific notation and choose units of appropriate size for very large or very small quantities.",
+ nctm:"Grade 8 FP1 · Algebra: Operations in scientific notation; unit analysis.",
+ FL:[{c:"MA.7.NSO.1.1",d:"Apply Laws of Exponents — operations with integer exponents (scientific notation operations partially covered in Grade 7 FL BEST)."}],
+ TX:[{c:"8.2(C)",d:"Convert between standard decimal notation and scientific notation."}],
+ CA:[{c:"8.EE.4",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.A.4",d:"Same as CCSS."}]},
+
+{g:8,d:"EE",cl:"B",clN:"Understand the connections between proportional relationships, lines, and linear equations",
+ id:"8.EE.B.5",desc:"Graph proportional relationships, interpreting the unit rate as the slope of the graph; compare two different proportional relationships represented in different ways.",
+ nctm:"Grade 8 FP1 · Algebra: Analyzing and representing linear functions — slope as unit rate of change in proportional relationships.",
+ FL:[{c:"MA.8.AR.3.2",d:"Given a table, graph, or written description of a linear function, determine the slope and state what it means in context."},{c:"MA.8.AR.3.3",d:"Given a table, graph, or written description of a linear function, write an equation in slope-intercept form."}],
+ TX:[{c:"8.4(B)",d:"Graph proportional relationships, interpreting the unit rate as the slope of the line that models the relationship."}],
+ CA:[{c:"8.EE.5",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.B.5",d:"Same as CCSS."}]},
+
+{g:8,d:"EE",cl:"B",clN:"Understand the connections between proportional relationships, lines, and linear equations",
+ id:"8.EE.B.6",desc:"Use similar triangles to explain why the slope m is the same between any two distinct points on a non-vertical line; derive y = mx and y = mx + b.",
+ nctm:"Grade 8 FP1 · Algebra: Deriving the equation of a line using similar triangles — connecting geometry to algebra.",
+ FL:[{c:"MA.8.AR.2.3",d:"Given a linear equation in two variables, write it in slope-intercept form; graph and interpret slope and y-intercept."},{c:"MA.8.AR.3.2",d:"Given a table, graph, or written description, determine the slope."}],
+ TX:[{c:"8.4(A)",d:"Use similar right triangles to develop an understanding that slope, given as the rate comparing the vertical change (rise) to the horizontal change (run), is the same for any two points on the same line."},{c:"8.4(C)",d:"Use data from a table or graph to determine the rate of change or slope and y-intercept in mathematical and real-world problems."}],
+ CA:[{c:"8.EE.6",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.B.6",d:"Same as CCSS."}]},
+
+{g:8,d:"EE",cl:"C",clN:"Analyze and solve linear equations and pairs of simultaneous linear equations",
+ id:"8.EE.C.7",desc:"Solve linear equations in one variable: equations with one solution, infinitely many solutions, or no solutions; linear equations with rational number coefficients. [Sub-standards a–b]",
+ nctm:"Grade 8 FP1 · Algebra: Solving linear equations — one solution, no solution, or infinitely many solutions.",
+ FL:[{c:"MA.8.AR.2.1",d:"Solve multi-step linear equations in one variable with rational number coefficients, including equations with variables on both sides."}],
+ TX:[{c:"8.8(A)",d:"Write one-variable equations or inequalities with variables on both sides that represent problems."},{c:"8.8(C)",d:"Model and solve one-variable equations with variables on both sides of the equal sign that represent mathematical and real-world problems."}],
+ CA:[{c:"8.EE.7",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.C.7",d:"Same as CCSS."}]},
+
+{g:8,d:"EE",cl:"C",clN:"Analyze and solve linear equations and pairs of simultaneous linear equations",
+ id:"8.EE.C.8",desc:"Analyze and solve pairs of simultaneous linear equations: estimate graphically, solve algebraically, solve in context. [Sub-standards a–c: graphing, algebraic, real-world]",
+ nctm:"Grade 8 FP1 · Algebra: Systems of linear equations — graphical and algebraic solution methods.",
+ FL:[{c:"MA.8.AR.3.4",d:"Given a system of two linear equations and a context, graph equations on the same coordinate plane and interpret the solution."},{c:"MA.8.AR.4.1",d:"Solve a system of two linear equations algebraically using substitution or elimination."},{c:"MA.8.AR.4.2",d:"Create a system of two linear equations from a real-world context and interpret the solution."}],
+ TX:[{c:"8.9(A)",d:"Identify and verify the values of x and y that simultaneously satisfy two linear equations in the form y = mx + b from the intersections of the graphed equations."},{c:"8.9(B)",d:"Identify the solution to a system of two linear equations as the ordered pair that satisfies both equations."}],
+ CA:[{c:"8.EE.8",d:"Same as CCSS."}],
+ NY:[{c:"8.EE.C.8",d:"Same as CCSS."}]},
+
+// ── 8.F ──────────────────────────────────────────────────────────────────
+{g:8,d:"F",cl:"A",clN:"Define, evaluate, and compare functions",
+ id:"8.F.A.1",desc:"Understand that a function is a rule that assigns to each input exactly one output. The graph of a function is the set of ordered pairs (input, output).",
+ nctm:"Grade 8 FP1 · Algebra: Analyzing and representing linear functions — defining what a function is.",
+ FL:[{c:"MA.8.AR.3.1",d:"Determine if a relation is a function. Given a function defined by a graph or an equation, determine whether it is linear or non-linear."}],
+ TX:[{c:"8.5(A)",d:"Represent linear proportional situations with tables, graphs, and equations y = kx."},{c:"8.5(B)",d:"Represent linear non-proportional situations with tables, graphs, and equations y = mx + b (b ≠ 0)."}],
+ CA:[{c:"8.F.1",d:"Same as CCSS."}],
+ NY:[{c:"8.F.A.1",d:"Same as CCSS."}]},
+
+{g:8,d:"F",cl:"A",clN:"Define, evaluate, and compare functions",
+ id:"8.F.A.2",desc:"Compare properties of two functions each represented in a different way (algebraically, graphically, numerically in tables, or by verbal descriptions).",
+ nctm:"Grade 8 FP1 · Algebra: Comparing linear functions across multiple representations.",
+ FL:[{c:"MA.8.AR.3.1",d:"Determine if a relation is a function; determine whether it is linear or non-linear."},{c:"MA.8.AR.3.2",d:"Given a table, graph, or description of a linear function, determine the slope."}],
+ TX:[{c:"8.5(B)",d:"Represent linear non-proportional situations in multiple forms."},{c:"8.5(F)",d:"Distinguish between proportional and non-proportional linear relationships and determine whether data or situations represent a linear relationship."}],
+ CA:[{c:"8.F.2",d:"Same as CCSS."}],
+ NY:[{c:"8.F.A.2",d:"Same as CCSS."}]},
+
+{g:8,d:"F",cl:"A",clN:"Define, evaluate, and compare functions",
+ id:"8.F.A.3",desc:"Interpret the equation y = mx + b as defining a linear function, whose graph is a straight line; give examples of functions that are not linear.",
+ nctm:"Grade 8 FP1 · Algebra: Linear functions; distinguishing linear from nonlinear functions.",
+ FL:[{c:"MA.8.AR.3.1",d:"Determine whether a function defined by a graph or equation is linear or non-linear."},{c:"MA.8.AR.2.3",d:"Write a linear equation in two variables in slope-intercept form; graph and interpret slope and y-intercept."}],
+ TX:[{c:"8.5(B)",d:"Represent linear non-proportional situations with tables, graphs, and equations y = mx + b."},{c:"8.5(F)",d:"Distinguish between proportional and non-proportional linear relationships."}],
+ CA:[{c:"8.F.3",d:"Same as CCSS."}],
+ NY:[{c:"8.F.A.3",d:"Same as CCSS."}]},
+
+{g:8,d:"F",cl:"B",clN:"Use functions to model relationships between quantities",
+ id:"8.F.B.4",desc:"Construct a function to model a linear relationship between two quantities. Determine the rate of change and initial value from a description, table, or graph.",
+ nctm:"Grade 8 FP1 · Algebra: Constructing linear functions to model relationships; interpreting slope and y-intercept in context.",
+ FL:[{c:"MA.8.AR.3.3",d:"Given a table, graph, or written description of a linear function, write an equation in slope-intercept form."}],
+ TX:[{c:"8.4(C)",d:"Use data from a table or graph to determine the rate of change or slope and y-intercept in mathematical and real-world problems."},{c:"8.5(B)",d:"Represent linear non-proportional situations with tables, graphs, and equations."}],
+ CA:[{c:"8.F.4",d:"Same as CCSS."}],
+ NY:[{c:"8.F.B.4",d:"Same as CCSS."}]},
+
+{g:8,d:"F",cl:"B",clN:"Use functions to model relationships between quantities",
+ id:"8.F.B.5",desc:"Describe qualitatively the functional relationship between two quantities by analyzing a graph (increasing/decreasing, linear/nonlinear). Sketch a graph from a verbal description.",
+ nctm:"Grade 8 FP1 · Algebra: Qualitative analysis of functions; connecting graphs to real-world stories.",
+ FL:[{c:"MA.8.AR.3.1",d:"Determine if a function is linear or non-linear; analyze qualitative features of a function defined by a graph."}],
+ TX:[{c:"8.5(C)",d:"Contrast bivariate sets of data that suggest linear relationships with those that do not, and predict from the trend."},{c:"8.5(D)",d:"Use a trend line to make predictions and describe the association as positive, negative, or neither."}],
+ CA:[{c:"8.F.5",d:"Same as CCSS."}],
+ NY:[{c:"8.F.B.5",d:"Same as CCSS."}]},
+
+// ── 8.G ──────────────────────────────────────────────────────────────────
+{g:8,d:"G",cl:"A",clN:"Understand congruence and similarity using physical models, transparencies, or geometry software",
+ id:"8.G.A.1",desc:"Verify experimentally the properties of rotations, reflections, and translations: lines map to lines, parallel lines to parallel lines, angles and distances are preserved. [Sub-standards a–c]",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Analyzing two- and three-dimensional space — transformations and congruence.",
+ FL:[{c:"MA.8.GR.1.5",d:"Identify and apply properties of similar and congruent figures to determine unknown angle measures and side lengths. (Note: FL BEST focuses on properties rather than transformations as the mechanism.)"}],
+ TX:[{c:"8.10(A)",d:"Generalize the properties of orientation and congruence of rotations, reflections, translations, and dilations of two-dimensional shapes on a coordinate plane."}],
+ CA:[{c:"8.G.1",d:"Same as CCSS."}],
+ NY:[{c:"8.G.A.1",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"A",clN:"Understand congruence and similarity using physical models, transparencies, or geometry software",
+ id:"8.G.A.2",desc:"Understand that a two-dimensional figure is congruent to another if the second can be obtained from the first by a sequence of rotations, reflections, and translations.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Congruence defined through rigid transformations.",
+ FL:[{c:"MA.8.GR.1.5",d:"Identify and apply properties of similar and congruent figures."}],
+ TX:[{c:"8.10(B)",d:"Differentiate between transformations that preserve congruence and those that do not."},{c:"8.10(C)",d:"Explain the effect of translations, reflections over the x- or y-axis, and rotations limited to 90°, 180°, 270°, and 360° on the attributes of two-dimensional shapes."}],
+ CA:[{c:"8.G.2",d:"Same as CCSS."}],
+ NY:[{c:"8.G.A.2",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"A",clN:"Understand congruence and similarity using physical models, transparencies, or geometry software",
+ id:"8.G.A.3",desc:"Describe the effect of dilations, translations, rotations, and reflections on two-dimensional figures using coordinates.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Describing transformations algebraically using coordinate rules.",
+ FL:[{c:"MA.8.GR.1.5",d:"Apply properties of similar and congruent figures — similarity via dilation; congruence via rigid transformations."}],
+ TX:[{c:"8.10(C)",d:"Explain the effect of translations, reflections, and rotations on attributes of two-dimensional shapes."},{c:"8.10(D)",d:"Model the effect on linear and area measurements of dilated two-dimensional shapes."}],
+ CA:[{c:"8.G.3",d:"Same as CCSS."}],
+ NY:[{c:"8.G.A.3",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"A",clN:"Understand congruence and similarity using physical models, transparencies, or geometry software",
+ id:"8.G.A.4",desc:"Understand that a two-dimensional figure is similar to another if the second can be obtained from the first by a sequence of rotations, reflections, translations, and dilations.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Similarity defined through a sequence of transformations including dilations.",
+ FL:[{c:"MA.8.GR.1.5",d:"Identify and apply properties of similar and congruent figures to determine unknown angle measures and side lengths."}],
+ TX:[{c:"8.10(A)",d:"Generalize properties of orientation and congruence of rotations, reflections, translations, and dilations."},{c:"8.10(B)",d:"Differentiate between transformations that preserve congruence and those that do not."}],
+ CA:[{c:"8.G.4",d:"Same as CCSS."}],
+ NY:[{c:"8.G.A.4",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"A",clN:"Understand congruence and similarity using physical models, transparencies, or geometry software",
+ id:"8.G.A.5",desc:"Use informal arguments to establish facts about angle sums and exterior angles of triangles, angles formed when parallel lines are cut by a transversal, and angle-angle criterion for similarity.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Informal proofs about angle relationships; angle-angle similarity.",
+ FL:[{c:"MA.8.GR.1.4",d:"Solve mathematical problems involving relationships of angles formed by two parallel lines cut by a transversal."},{c:"MA.8.GR.1.5",d:"Identify and apply properties of similar figures — angle-angle criterion."}],
+ TX:[{c:"8.8(D)",d:"Use informal arguments to establish facts about the angle sum and exterior angle of triangles, about angles created when parallel lines are cut by a transversal, and the angle-angle criterion for similarity of triangles."}],
+ CA:[{c:"8.G.5",d:"Same as CCSS."}],
+ NY:[{c:"8.G.A.5",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"B",clN:"Understand and apply the Pythagorean Theorem",
+ id:"8.G.B.6",desc:"Explain a proof of the Pythagorean Theorem and its converse.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Pythagorean Theorem — proof and converse.",
+ FL:[{c:"MA.8.GR.1.1",d:"Apply the Pythagorean Theorem to find the length of a missing side in a right triangle."}],
+ TX:[{c:"8.7(C)",d:"Use the Pythagorean Theorem and its converse to solve problems."}],
+ CA:[{c:"8.G.6",d:"Same as CCSS."}],
+ NY:[{c:"8.G.B.6",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"B",clN:"Understand and apply the Pythagorean Theorem",
+ id:"8.G.B.7",desc:"Apply the Pythagorean Theorem to determine unknown side lengths in right triangles in real-world and mathematical problems in two and three dimensions.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Applying the Pythagorean Theorem in two and three dimensions.",
+ FL:[{c:"MA.8.GR.1.1",d:"Apply the Pythagorean Theorem to find a missing side in a right triangle to solve mathematical and real-world problems."}],
+ TX:[{c:"8.7(C)",d:"Use the Pythagorean Theorem and its converse to solve problems."}],
+ CA:[{c:"8.G.7",d:"Same as CCSS."}],
+ NY:[{c:"8.G.B.7",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"B",clN:"Understand and apply the Pythagorean Theorem",
+ id:"8.G.B.8",desc:"Apply the Pythagorean Theorem to find the distance between two points in a coordinate system.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Distance in the coordinate plane via the Pythagorean Theorem.",
+ FL:[{c:"MA.8.GR.1.2",d:"Apply the Pythagorean Theorem to solve problems involving the distance between two points in a coordinate plane."}],
+ TX:[{c:"8.7(D)",d:"Determine the distance between two points on a coordinate plane using the Pythagorean Theorem."}],
+ CA:[{c:"8.G.8",d:"Same as CCSS."}],
+ NY:[{c:"8.G.B.8",d:"Same as CCSS."}]},
+
+{g:8,d:"G",cl:"C",clN:"Solve real-world and mathematical problems involving volume of cylinders, cones, and spheres",
+ id:"8.G.C.9",desc:"Know the formulas for the volumes of cones, cylinders, and spheres and use them to solve real-world and mathematical problems.",
+ nctm:"Grade 8 FP2 · Geometry and Measurement: Volume formulas for curved solids — cylinders, cones, and spheres.",
+ FL:[{c:"MA.8.GR.2.1",d:"Find the volume and surface area of cylinders using appropriate formulas."},{c:"MA.8.GR.2.2",d:"Find the volume and surface area of cones using appropriate formulas."},{c:"MA.8.GR.2.3",d:"Find the volume and surface area of spheres using appropriate formulas."}],
+ TX:[{c:"8.7(A)",d:"Solve problems involving the volume of cylinders, cones, and spheres."}],
+ CA:[{c:"8.G.9",d:"Same as CCSS."}],
+ NY:[{c:"8.G.C.9",d:"Same as CCSS."}]},
+
+// ── 8.SP ──────────────────────────────────────────────────────────────────
+{g:8,d:"SP",cl:"A",clN:"Investigate patterns of association in bivariate data",
+ id:"8.SP.A.1",desc:"Construct and interpret scatter plots for bivariate measurement data; describe patterns such as clustering, outliers, positive/negative association, linear/nonlinear association.",
+ nctm:"Grade 8 FP3 · Data Analysis: Analyzing and summarizing bivariate data — scatter plots and association.",
+ FL:[{c:"MA.8.DP.1.1",d:"Given a set of bivariate numerical data, construct a scatter plot or a line graph as appropriate."},{c:"MA.8.DP.1.2",d:"Given a scatter plot, determine if there is an association between the two variables and describe the association."}],
+ TX:[{c:"8.11(A)",d:"Construct a scatterplot and describe the observed data to address questions of association such as linear, non-linear, and no association between bivariate data."}],
+ CA:[{c:"8.SP.1",d:"Same as CCSS."}],
+ NY:[{c:"8.SP.A.1",d:"Same as CCSS."}]},
+
+{g:8,d:"SP",cl:"A",clN:"Investigate patterns of association in bivariate data",
+ id:"8.SP.A.2",desc:"Know that straight lines are widely used to model linear associations between two quantitative variables. For scatter plots suggesting linear association, informally fit a straight line and assess model fit.",
+ nctm:"Grade 8 FP3 · Data Analysis: Fitting lines to bivariate data; informal model fitting.",
+ FL:[{c:"MA.8.DP.1.3",d:"Given a scatter plot with a linear association, informally fit a line."}],
+ TX:[{c:"8.11(A)",d:"Construct a scatterplot and describe the observed data for linear or non-linear association."},{c:"8.5(C)",d:"Contrast bivariate sets of data that suggest linear relationships with those that do not."}],
+ CA:[{c:"8.SP.2",d:"Same as CCSS."}],
+ NY:[{c:"8.SP.A.2",d:"Same as CCSS."}]},
+
+{g:8,d:"SP",cl:"A",clN:"Investigate patterns of association in bivariate data",
+ id:"8.SP.A.3",desc:"Use the equation of a linear model to solve problems in the context of bivariate measurement data, interpreting the slope and intercept.",
+ nctm:"Grade 8 FP3 · Data Analysis: Interpreting linear models for bivariate data — slope and intercept in context.",
+ FL:[{c:"MA.8.DP.1.3",d:"Informally fit a line to a scatter plot with a linear association; interpret in context."}],
+ TX:[{c:"8.5(D)",d:"Use a trend line that approximates the linear relationship between bivariate sets of data to make predictions."}],
+ CA:[{c:"8.SP.3",d:"Same as CCSS."}],
+ NY:[{c:"8.SP.A.3",d:"Same as CCSS."}]},
+
+{g:8,d:"SP",cl:"A",clN:"Investigate patterns of association in bivariate data",
+ id:"8.SP.A.4",desc:"Understand that patterns of association can also be seen in bivariate categorical data by displaying frequencies and relative frequencies in a two-way table.",
+ nctm:"Grade 8 FP3 · Data Analysis: Two-way tables for bivariate categorical data — joint, marginal, and conditional frequencies.",
+ FL:[{c:"MA.8.DP.1.4",d:"Given two-way tables summarizing data on two categorical variables from the same subjects, construct and interpret relative frequency tables. (Note: some editions of FL BEST differ — verify current standards.)"}],
+ TX:[{c:"",d:"Two-way frequency tables are not explicitly addressed as a separate TEKS standard at Grade 8. May be covered within 8.11 or introduced in Algebra I."}],
+ CA:[{c:"8.SP.4",d:"Same as CCSS."}],
+ NY:[{c:"8.SP.A.4",d:"Same as CCSS."}]}
+]; // end S array
+
+// ─── APP ────────────────────────────────────────────────────────────────────
+let activeGrade = "all";
+let activeStates = new Set(["FL","TX","CA","NY"]);
+let searchQuery = "";
+
+function esc(str){
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function highlight(str, q){
+  if(!q) return esc(str);
+  const re = new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
+  return esc(str).replace(re,"<mark>$1</mark>");
+}
+
+function getDomainColor(d){return DOMAIN_COLORS[d]||"#6b7280"}
+function getDomainName(d){return DOMAIN_NAMES[d]||d}
+
+function getVisibleStandards(){
+  const q = searchQuery.toLowerCase().trim();
+  return S.filter(s=>{
+    if(activeGrade !== "all" && s.g !== parseInt(activeGrade)) return false;
+    if(!q) return true;
+    return s.id.toLowerCase().includes(q) ||
+           s.desc.toLowerCase().includes(q) ||
+           s.nctm.toLowerCase().includes(q) ||
+           ["FL","TX","CA","NY"].some(st=>
+             s[st].some(c=>c.c.toLowerCase().includes(q)||c.d.toLowerCase().includes(q))
+           );
+  });
+}
+
+function groupStandards(list){
+  // group by grade → domain → cluster
+  const out = {};
+  list.forEach(s=>{
+    const gk = s.g;
+    if(!out[gk]) out[gk]={};
+    const dk = s.d;
+    if(!out[gk][dk]) out[gk][dk]={};
+    const ck = s.cl;
+    if(!out[gk][dk][ck]) out[gk][dk][ck]={name:s.clN, items:[]};
+    out[gk][dk][ck].items.push(s);
+  });
+  return out;
+}
+
+function renderStateRow(s, state){
+  if(!activeStates.has(state)) return "";
+  const corrs = s[state];
+  if(!corrs || !corrs.length) return `<div class="state-row"><span class="state-label ${state}">${state}</span><span class="no-match">Not directly addressed in ${state} standards at this grade level.</span></div>`;
+  const q = searchQuery.toLowerCase().trim();
+  const pairs = corrs.map((c,i)=>{
+    const hasCode = c.c && c.c.trim();
+    const codeHtml = hasCode ? `<span class="s-code">${highlight(c.c,q)}</span>` : "";
+    return `<span class="state-std">${codeHtml}<span class="s-desc">${highlight(c.d,q)}</span></span>${i<corrs.length-1?'<span class="s-sep">·</span>':''}`;
+  }).join("");
+  return `<div class="state-row"><span class="state-label ${state}">${state}</span><div class="state-codes">${pairs}</div></div>`;
+}
+
+function renderCard(s){
+  const color = getDomainColor(s.d);
+  const q = searchQuery.toLowerCase().trim();
+  const id = "card-"+s.id.replace(/\./g,"-");
+  const stateRowsHtml = ["FL","TX","CA","NY"].map(st=>renderStateRow(s,st)).join("");
+  const hasStates = activeStates.size > 0;
+  // Auto-expand when searching so matching state codes are immediately visible
+  const expanded = q.length > 0 && hasStates;
+  return `<div class="std-card" id="${id}">
+    <div class="std-card-header">
+      <span class="std-code" style="background:${color}">${s.id}</span>
+      <span class="std-desc">${highlight(s.desc,q)}</span>
+      <button class="std-expand${expanded?' open':''}" onclick="toggleCard(this)" aria-label="Expand" ${!hasStates?'style="visibility:hidden"':''}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+    <div class="nctm-row">
+      <span class="nctm-badge">NCTM</span>
+      <span class="nctm-text">${highlight(s.nctm,q)}</span>
+    </div>
+    <div class="state-rows" style="display:${expanded?'block':'none'}">${stateRowsHtml}</div>
+  </div>`;
+}
+
+function toggleCard(btn){
+  btn.classList.toggle("open");
+  const stateRows = btn.closest(".std-card").querySelector(".state-rows");
+  stateRows.style.display = stateRows.style.display==="none" ? "block" : "none";
+}
+
+function renderSidebar(grouped){
+  const grades = Object.keys(grouped).sort();
+  let html = "";
+  grades.forEach(g=>{
+    html += `<div class="sb-section"><div class="sb-grade">Grade ${g}</div>`;
+    const domains = Object.keys(grouped[g]).sort((a,b)=>{
+      const order = ["RP","NS","EE","G","SP","F"];
+      return order.indexOf(a)-order.indexOf(b);
+    });
+    domains.forEach(d=>{
+      const count = Object.values(grouped[g][d]).reduce((n,cl)=>n+cl.items.length,0);
+      html += `<div class="sb-domain" onclick="scrollToDomain('${g}-${d}')" data-domain="${g}-${d}">
+        <span class="sb-dot" style="background:${getDomainColor(d)}"></span>
+        <span>${getDomainName(d)}</span>
+        <span class="sb-count">${count}</span>
+      </div>`;
+    });
+    html += "</div>";
+  });
+  document.getElementById("sidebar").innerHTML = html;
+}
+
+function scrollToDomain(key){
+  const el = document.getElementById("domain-"+key);
+  if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function render(){
+  const visible = getVisibleStandards();
+  const grouped = groupStandards(visible);
+  renderSidebar(grouped);
+
+  const grades = Object.keys(grouped).sort();
+  let html = "";
+
+  if(!visible.length){
+    html = `<div class="empty"><h3>No standards found</h3><p>Try a different search term or adjust your filters.</p></div>`;
+    document.getElementById("main").innerHTML = html;
+    document.getElementById("resultCount").textContent = "0 results";
+    return;
+  }
+
+  html += `<div class="disclaimer">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>State correlations are approximate and based on publicly available standards documents. Always verify against current official state standards before using in curriculum planning.</span>
+  </div>`;
+
+  const domainOrder = ["RP","NS","EE","G","SP","F"];
+
+  grades.forEach(g=>{
+    const domains = Object.keys(grouped[g]).sort((a,b)=>domainOrder.indexOf(a)-domainOrder.indexOf(b));
+    domains.forEach(d=>{
+      const color = getDomainColor(d);
+      html += `<div class="domain-section" id="domain-${g}-${d}">
+        <div class="domain-header">
+          <span class="domain-dot" style="background:${color}"></span>
+          <span class="domain-name">${getDomainName(d)}</span>
+          <span class="domain-grade">Grade ${g}</span>
+        </div>`;
+      const clusters = grouped[g][d];
+      Object.keys(clusters).sort().forEach(ck=>{
+        const cl = clusters[ck];
+        html += `<div class="cluster-label">${cl.name}</div>`;
+        cl.items.forEach(s=>{html += renderCard(s)});
+      });
+      html += `</div>`;
+    });
+  });
+
+  document.getElementById("main").innerHTML = html;
+  document.getElementById("resultCount").textContent = visible.length+" standard"+(visible.length!==1?"s":"");
+
+  // Sync expand-all button label: if search is active, cards start expanded
+  _allExpanded = searchQuery.trim().length > 0;
+  document.getElementById("expandAllBtn").textContent = _allExpanded ? "Collapse All" : "Expand All";
+
+  // highlight active sidebar domain on scroll
+  observeDomains();
+}
+
+let _domainObserver = null;
+function observeDomains(){
+  if(_domainObserver) _domainObserver.disconnect();
+  const sections = document.querySelectorAll(".domain-section");
+  if(!sections.length) return;
+  _domainObserver = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        document.querySelectorAll(".sb-domain").forEach(el=>el.classList.remove("active"));
+        const key = e.target.id.replace("domain-","");
+        const sb = document.querySelector(`.sb-domain[data-domain="${key}"]`);
+        if(sb) sb.classList.add("active");
+      }
+    });
+  },{rootMargin:"-20% 0px -70% 0px"});
+  sections.forEach(s=>_domainObserver.observe(s));
+}
+
+let _allExpanded = false;
+function toggleAllCards(){
+  _allExpanded = !_allExpanded;
+  document.querySelectorAll(".state-rows").forEach(el=>{
+    el.style.display = _allExpanded ? "block" : "none";
+  });
+  document.querySelectorAll(".std-expand").forEach(btn=>{
+    btn.classList.toggle("open", _allExpanded);
+  });
+  document.getElementById("expandAllBtn").textContent = _allExpanded ? "Collapse All" : "Expand All";
+}
+
+// ─── EVENT HANDLERS ──────────────────────────────────────────────────────────
+document.getElementById("searchInput").addEventListener("input",e=>{
+  searchQuery = e.target.value;
+  render();
+});
+
+document.getElementById("gradePills").querySelectorAll(".pill").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".pill").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    activeGrade = btn.dataset.grade;
+    render();
+  });
+});
+
+document.getElementById("stateToggles").querySelectorAll(".state-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const st = btn.dataset.state;
+    if(activeStates.has(st)){
+      if(activeStates.size===1) return; // keep at least one
+      activeStates.delete(st);
+      btn.classList.remove("active");
+    } else {
+      activeStates.add(st);
+      btn.classList.add("active");
+    }
+    render();
+  });
+});
+
+render();
+
+</script>
+</body>
+</html>
