@@ -99,6 +99,45 @@
     background: white;
   }
 
+  /* ── Grade / Advanced select dropdowns ── */
+  .sel-dropdown { position: relative; }
+
+  .sel-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 17px; border-radius: 999px;
+    background: white; color: var(--fl);
+    font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+    cursor: pointer; border: 1.5px solid var(--fl);
+    white-space: nowrap; user-select: none;
+    transition: background .18s, color .18s;
+  }
+  .sel-btn:hover:not(.active) { background: var(--fl-light); }
+  .sel-btn.active { background: var(--fl); color: white; }
+  .sel-btn .caret { font-size: 10px; margin-left: 1px; }
+
+  .sel-menu {
+    display: none;
+    position: absolute; top: calc(100% + 8px); left: 0;
+    background: white; border: 1.5px solid var(--gray200);
+    border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    min-width: 210px; z-index: 100; overflow: hidden;
+  }
+  .sel-menu.open { display: block; }
+  .sel-menu .flow-menu-header { padding: 9px 14px 7px; }
+  .sel-menu a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px; font-size: 13px; font-weight: 600;
+    color: var(--gray800); text-decoration: none; transition: background .12s;
+  }
+  .sel-menu a:hover { background: var(--fl-light); color: var(--fl); }
+  .sel-menu a .menu-icon { font-size: 15px; }
+  .sel-menu a .menu-sub { font-size: 11px; color: var(--gray600); display: block; margin-top: 1px; font-weight: 400; }
+  .sel-menu a:not(:last-child) { border-bottom: 1px solid var(--gray200); }
+  .sel-menu a.menu-disabled {
+    opacity: 0.45; cursor: default; pointer-events: none;
+    font-style: italic;
+  }
+
   /* ── Teaching Flow dropdown ── */
   .flow-dropdown { position: relative; }
 
@@ -403,15 +442,52 @@
 </header>
 
 <div class="controls">
+  <!-- Standard grades dropdown -->
   <div class="control-group">
     <span class="control-label">Standard</span>
-    <button class="grade-btn" data-grade="6">6th</button>
-    <button class="grade-btn" data-grade="7">7th</button>
-    <button class="grade-btn" data-grade="8">8th</button>
+    <div class="sel-dropdown" id="grade-dd">
+      <div class="sel-btn" id="grade-toggle">
+        <span id="grade-label">Select Grade</span>
+        <span class="caret">&#9660;</span>
+      </div>
+      <div class="sel-menu" id="grade-menu">
+        <div class="flow-menu-header">Grade Level</div>
+        <a href="#" data-grade="6">
+          <span class="menu-icon">&#128216;</span>
+          <span>6th Grade<span class="menu-sub">Florida BEST &mdash; 6th</span></span>
+        </a>
+        <a href="#" data-grade="7">
+          <span class="menu-icon">&#128217;</span>
+          <span>7th Grade<span class="menu-sub">Florida BEST &mdash; 7th</span></span>
+        </a>
+        <a href="#" data-grade="8">
+          <span class="menu-icon">&#128218;</span>
+          <span>8th Grade<span class="menu-sub">Florida BEST &mdash; 8th</span></span>
+        </a>
+      </div>
+    </div>
   </div>
+
+  <!-- Advanced courses dropdown -->
   <div class="control-group">
     <span class="control-label">Advanced</span>
-    <button class="grade-btn active" data-grade="0">RAMP 6</button>
+    <div class="sel-dropdown" id="adv-dd">
+      <div class="sel-btn active" id="adv-toggle">
+        <span id="adv-label">RAMP 6</span>
+        <span class="caret">&#9660;</span>
+      </div>
+      <div class="sel-menu" id="adv-menu">
+        <div class="flow-menu-header">Advanced Courses</div>
+        <a href="#" data-grade="0">
+          <span class="menu-icon">&#128640;</span>
+          <span>RAMP 6<span class="menu-sub">Accelerated Gr. 7+8</span></span>
+        </a>
+        <a class="menu-disabled">
+          <span class="menu-icon">&#8230;</span>
+          <span>More courses<span class="menu-sub">Additional courses in development</span></span>
+        </a>
+      </div>
+    </div>
   </div>
   <div class="control-group">
     <span class="control-label">Period</span>
@@ -2295,18 +2371,60 @@ function buildRamp6() {
   });
 }
 
-// ─── TEACHING FLOW DROPDOWN ──────────────────────────────────────────────────
-(function() {
-  const toggle = document.getElementById("flow-toggle");
-  const menu   = document.getElementById("flow-menu");
-  toggle.addEventListener("click", function(e) {
+// ─── DROPDOWN HELPERS ────────────────────────────────────────────────────────
+const ALL_MENUS = ["flow-menu", "grade-menu", "adv-menu"];
+
+function closeAllMenus(except) {
+  ALL_MENUS.forEach(id => {
+    if (id !== except) document.getElementById(id)?.classList.remove("open");
+  });
+}
+
+function bindDropdown(toggleId, menuId) {
+  document.getElementById(toggleId).addEventListener("click", function(e) {
     e.stopPropagation();
-    menu.classList.toggle("open");
+    const menu = document.getElementById(menuId);
+    const willOpen = !menu.classList.contains("open");
+    closeAllMenus(menuId);
+    menu.classList.toggle("open", willOpen);
   });
-  document.addEventListener("click", function() {
-    menu.classList.remove("open");
-  });
-})();
+}
+
+document.addEventListener("click", () => closeAllMenus(null));
+
+// ─── TEACHING FLOW DROPDOWN ──────────────────────────────────────────────────
+bindDropdown("flow-toggle", "flow-menu");
+
+// ─── GRADE DROPDOWN ──────────────────────────────────────────────────────────
+bindDropdown("grade-toggle", "grade-menu");
+bindDropdown("adv-toggle",   "adv-menu");
+
+const GRADE_LABELS = { 6: "6th Grade", 7: "7th Grade", 8: "8th Grade" };
+const ADV_LABELS   = { 0: "RAMP 6" };
+
+function syncGradeDropdowns(g) {
+  const isAdv = (g === 0);
+  document.getElementById("grade-toggle").classList.toggle("active", !isAdv);
+  document.getElementById("adv-toggle").classList.toggle("active",  isAdv);
+  document.getElementById("grade-label").textContent = isAdv ? "Select Grade"   : (GRADE_LABELS[g] || "Grade");
+  document.getElementById("adv-label").textContent   = isAdv ? (ADV_LABELS[g] || "Advanced") : "Advanced";
+}
+
+document.querySelectorAll("#grade-menu a[data-grade]").forEach(a =>
+  a.addEventListener("click", e => {
+    e.preventDefault();
+    document.getElementById("grade-menu").classList.remove("open");
+    setGrade(a.dataset.grade);
+  })
+);
+
+document.querySelectorAll("#adv-menu a[data-grade]").forEach(a =>
+  a.addEventListener("click", e => {
+    e.preventDefault();
+    document.getElementById("adv-menu").classList.remove("open");
+    setGrade(a.dataset.grade);
+  })
+);
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let currentGrade   = 0;
@@ -3035,9 +3153,7 @@ function selectStandard(code) {
 function setGrade(g) {
   currentGrade = +g;
   currentCode = null;
-  document.querySelectorAll(".grade-btn").forEach(b => {
-    b.classList.toggle("active", +b.dataset.grade === currentGrade);
-  });
+  syncGradeDropdowns(currentGrade);
   renderList();
   renderEmpty();
 }
@@ -3053,9 +3169,6 @@ function setQuarter(q) {
 }
 
 // ─── EVENT LISTENERS ─────────────────────────────────────────────────────────
-document.querySelectorAll(".grade-btn").forEach(b =>
-  b.addEventListener("click", () => setGrade(b.dataset.grade)));
-
 document.querySelectorAll(".quarter-btn").forEach(b =>
   b.addEventListener("click", () => setQuarter(b.dataset.quarter)));
 
@@ -3067,6 +3180,7 @@ document.getElementById("search-box").addEventListener("input", e => {
 });
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+syncGradeDropdowns(currentGrade);
 renderList();
 </script>
 </body>
