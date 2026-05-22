@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAMP 6 Teaching Flow — The Calculated Classroom</title>
+  <style>
+    :root {
+      --q1: #1d6fa4; --q1-light: #e8f3fa;
+      --q2: #2e7d32; --q2-light: #e8f5e9;
+      --q3: #6a1b9a; --q3-light: #f3e5f5;
+      --q4: #b07d00; --q4-light: #fff8dc;
+      --fl: #003087;
+      --ramp: #00695c;
+      --text: #1a1a1a; --muted: #666;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f6fa;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--fl);
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .header-badge {
+      background: white; color: var(--fl);
+      font-weight: 800; font-size: 0.75rem;
+      padding: 4px 10px; border-radius: 6px;
+      letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;
+    }
+    .header-brand { line-height: 1.2; }
+    .brand-name { font-size: 1rem; font-weight: 700; }
+    .brand-name span { color: #90caf9; }
+    .brand-sub { font-size: 0.7rem; opacity: 0.8; }
+    .header-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.3); margin: 0 4px; }
+    header h1 { font-size: 1.15rem; font-weight: 700; }
+    header p { font-size: 0.78rem; opacity: 0.85; margin-top: 2px; }
+
+    /* ── PAGE INTRO ── */
+    .page-intro {
+      background: white;
+      border-bottom: 2px solid #e0e0e0;
+      padding: 16px 28px 18px;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.8rem; color: var(--fl); text-decoration: none;
+      font-weight: 600; margin-bottom: 8px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    .page-intro h2 { font-size: 1.05rem; color: var(--fl); font-weight: 700; }
+    .page-intro p { font-size: 0.83rem; color: var(--muted); margin-top: 5px; max-width: 850px; line-height: 1.5; }
+
+    .ramp-pill {
+      display: inline-block;
+      background: var(--ramp); color: white;
+      font-size: 0.71rem; font-weight: 800;
+      padding: 3px 10px; border-radius: 4px;
+      letter-spacing: 0.06em; margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .legend {
+      display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.77rem; color: var(--muted); font-weight: 500;
+    }
+    .legend-pip {
+      width: 11px; height: 11px; border-radius: 3px;
+    }
+
+    /* ── FLOW GRID ── */
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      padding: 24px 28px 32px;
+      flex: 1;
+      align-items: start;
+    }
+
+    /* ── QUARTER COLUMN ── */
+    .quarter-col { display: flex; flex-direction: column; }
+
+    .quarter-header {
+      padding: 13px 16px;
+      border-radius: 10px 10px 0 0;
+      color: white;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+    .quarter-header .q-label { font-size: 1rem; }
+    .quarter-header .q-count { font-size: 0.68rem; font-weight: 400; opacity: 0.80; margin-top: 1px; }
+    .quarter-header .q-theme {
+      font-size: 0.71rem; font-weight: 400; opacity: 0.88; margin-top: 3px;
+    }
+    .qh-q1 { background: var(--q1); }
+    .qh-q2 { background: var(--q2); }
+    .qh-q3 { background: var(--q3); }
+
+    .cards-wrap {
+      background: white;
+      border: 1px solid #ddd; border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 14px 12px 16px;
+      display: flex; flex-direction: column;
+    }
+
+    /* ── STANDARD CARD ── */
+    .std-card {
+      position: relative;
+      border-radius: 8px;
+      padding: 10px 12px 10px 46px;
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      transition: box-shadow 0.15s, transform 0.15s;
+      cursor: default;
+    }
+    .std-card:hover {
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transform: translateY(-1px);
+    }
+    /* Grade 8 cards get a subtle teal border */
+    .std-card.gr8 { border-left: 3px solid var(--ramp); background: #f5fdfb; }
+
+    .step-num {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      width: 27px; height: 27px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 800; color: white;
+    }
+    .sn-q1 { background: var(--q1); }
+    .sn-q2 { background: var(--q2); }
+    .sn-q3 { background: var(--q3); }
+
+    .grade-badge {
+      display: inline-block;
+      font-size: 0.59rem; font-weight: 800;
+      padding: 1px 5px; border-radius: 3px;
+      letter-spacing: 0.04em; margin-bottom: 2px;
+      background: var(--ramp); color: white;
+    }
+
+    .strand-pill {
+      display: inline-block;
+      font-size: 0.63rem; font-weight: 700;
+      padding: 1px 7px; border-radius: 3px;
+      letter-spacing: 0.04em; margin-bottom: 3px;
+    }
+    .sp-NSO { background: #fff3e0; color: #bf360c; }
+    .sp-DP  { background: #e3f2fd; color: #01579b; }
+    .sp-GR  { background: #e8f5e9; color: #1b5e20; }
+    .sp-AR  { background: #f3e5f5; color: #4a148c; }
+
+    .card-code { font-size: 0.71rem; font-weight: 700; color: #888; letter-spacing: 0.03em; }
+    .card-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin: 2px 0 4px; line-height: 1.3; }
+    .card-rationale { font-size: 0.74rem; color: var(--muted); line-height: 1.45; }
+
+    /* ── SUB-SECTION DIVIDER (used in long Q3) ── */
+    .sub-divider {
+      display: flex; align-items: center; gap: 8px;
+      margin: 14px 0 10px;
+    }
+    .sub-divider-line { flex: 1; height: 1px; background: #ddd; }
+    .sub-divider-label {
+      font-size: 0.68rem; font-weight: 800;
+      color: #aaa; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+    }
+
+    /* ── ARROW CONNECTOR ── */
+    .arrow-connector {
+      display: flex; align-items: center; justify-content: center;
+      height: 20px; color: #bbb; font-size: 18px; line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* ── CROSS-QUARTER NOTE ── */
+    .cross-note {
+      margin-top: 14px;
+      padding: 10px 13px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: #555; line-height: 1.5;
+      border-left: 3px solid;
+    }
+    .cn-q1 { background: #fff8e1; border-color: #f9a825; }
+    .cn-q2 { background: #fff8e1; border-color: #f9a825; }
+    .cn-q3 { background: #e0f7fa; border-color: var(--ramp); }
+    .cross-note strong { color: #333; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 14px 24px;
+      font-size: 0.7rem;
+      background: #1a1a2e; color: #999;
+      flex-shrink: 0;
+    }
+    footer strong { color: #ddd; }
+
+    @media (max-width: 900px) {
+      .flow-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── PRINT BUTTON ── */
+    .print-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 16px; border-radius: 20px;
+      background: var(--fl); color: white; border: none;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      margin-top: 10px; transition: opacity 0.15s;
+    }
+    .print-btn:hover { opacity: 0.85; }
+
+    /* ── PRINT STYLES ── */
+    @media print {
+      @page { size: portrait; margin: 1.2cm; }
+      header, .back-link, .print-btn { display: none !important; }
+      body { background: white; }
+      .page-intro { border: none; padding: 0 0 12px; }
+      .flow-grid {
+        grid-template-columns: 1fr;
+        padding: 0; gap: 16px;
+      }
+      .q4-section { margin: 16px 0 0; }
+      .cluster-grid { grid-template-columns: repeat(3, 1fr); }
+      .std-card { break-inside: avoid; }
+      .quarter-col { break-inside: avoid; }
+      footer { display: none; }
+    }
+
+    /* ── Q4 SECTION ── */
+    .q4-section {
+      margin: 0 28px 32px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--q4);
+    }
+    .q4-header {
+      background: var(--q4);
+      color: white;
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .q4-header-text h2 { font-size: 1rem; font-weight: 800; letter-spacing: 0.06em; }
+    .q4-header-text p { font-size: 0.78rem; opacity: 0.88; margin-top: 3px; }
+    .q4-badge {
+      background: rgba(255,255,255,0.2);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 8px; padding: 6px 14px;
+      font-size: 0.85rem; font-weight: 800; white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+
+    .q4-body {
+      background: var(--q4-light);
+      padding: 20px 24px 24px;
+    }
+    .q4-intro {
+      font-size: 0.82rem; color: #555; line-height: 1.6; margin-bottom: 20px;
+      max-width: 1000px;
+    }
+
+    .cluster-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 1000px) { .cluster-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 650px)  { .cluster-grid { grid-template-columns: 1fr; } }
+
+    .cluster-card {
+      background: white;
+      border-radius: 10px;
+      border: 1.5px solid #e0d090;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .cluster-header {
+      padding: 10px 13px;
+      font-size: 0.78rem; font-weight: 800;
+      letter-spacing: 0.04em; color: white;
+    }
+    .ch-nso  { background: #bf360c; }
+    .ch-alg  { background: #4a148c; }
+    .ch-fin  { background: #1565c0; }
+    .ch-gr   { background: #1b5e20; }
+    .ch-lin  { background: #00695c; }
+    .ch-data { background: #01579b; }
+
+    .cluster-week {
+      font-size: 0.68rem; font-weight: 500; opacity: 0.85;
+      margin-top: 1px; font-style: italic;
+    }
+
+    .cluster-body { padding: 11px 13px; flex: 1; display: flex; flex-direction: column; gap: 9px; }
+
+    .cluster-standards { display: flex; flex-direction: column; gap: 5px; }
+    .cs-chip {
+      display: flex; align-items: flex-start; gap: 7px;
+      font-size: 0.73rem;
+    }
+    .cs-code {
+      font-weight: 700; color: #444; white-space: nowrap;
+      min-width: 80px; font-size: 0.68rem; margin-top: 1px;
+    }
+    .cs-title { color: #555; line-height: 1.35; }
+
+    .cluster-focus {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #fffde7;
+      border-left: 3px solid var(--q4);
+      border-radius: 0 5px 5px 0;
+      font-size: 0.72rem; color: #555; line-height: 1.45;
+    }
+    .cluster-focus strong { color: #7a5500; }
+
+    .cluster-tip {
+      margin-top: 7px;
+      font-size: 0.71rem; color: #777; line-height: 1.4;
+      font-style: italic;
+    }
+
+    .q4-footer-note {
+      margin-top: 18px;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e0d090;
+      font-size: 0.78rem; color: #555; line-height: 1.6;
+    }
+    .q4-footer-note strong { color: var(--q4); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Florida</div>
+  <div class="header-brand">
+    <div class="brand-name">The <span>Calculated</span> Classroom</div>
+    <div class="brand-sub">by Axiomatic Field</div>
+  </div>
+  <div class="header-divider"></div>
+  <div>
+    <h1>RAMP 6 &mdash; Teaching Flow</h1>
+    <p>Accelerated sequence &nbsp;&middot;&nbsp; Grade 7 &amp; 8 FL BEST Standards &nbsp;&middot;&nbsp; SCPS Pacing</p>
+  </div>
+</header>
+
+<div class="page-intro">
+  <a class="back-link" href="scps_standards_alignment.html">&#8592; Back to Standards Alignment Tool</a>
+  <h2>Recommended Teaching Sequence &mdash; RAMP 6 <span class="ramp-pill">ADVANCED</span></h2>
+  <p>
+    RAMP 6 is an accelerated course that covers 7th grade standards alongside selected 8th grade content.
+    Standards within each quarter are ordered to maximize conceptual coherence &mdash; number sense foundations first,
+    algebraic applications next, and Grade 8 extensions last. Cross-quarter notes highlight where earlier skills
+    unlock later content and where the course bridges toward 9th grade Algebra.
+    <strong>Grade 8 standards are marked with a teal border.</strong>
+  </p>
+  <button class="print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-pip" style="background:#bf360c;"></div>NSO &mdash; Number Sense &amp; Operations</div>
+    <div class="legend-item"><div class="legend-pip" style="background:#4a148c;"></div>AR &mdash; Algebraic Reasoning</div>
+    <div class="legend-item"><div class="legend-pip" style="background:#1b5e20;"></div>GR &mdash; Geometric Reasoning</div>
+    <div class="legend-item"><div class="legend-pip" style="background:#01579b;"></div>DP &mdash; Data Analysis</div>
+    <div class="legend-item"><div class="legend-pip" style="background:#00695c;"></div>Grade 8 Standard</div>
+  </div>
+</div>
+
+<div class="flow-grid">
+
+  <!-- ══════════ Q1 ══════════ -->
+  <div class="quarter-col">
+    <div class="quarter-header qh-q1">
+      <div class="q-label">QUARTER 1</div>
+      <div class="q-count">9 standards</div>
+      <div class="q-theme">Rational Numbers &rarr; Algebra &rarr; Systems</div>
+    </div>
+    <div class="cards-wrap">
+
+      <div class="std-card">
+        <div class="step-num sn-q1">1</div>
+        <div><span class="strand-pill sp-NSO">NSO</span></div>
+        <div class="card-code">MA.7.NSO.1.2</div>
+        <div class="card-title">Multiply &amp; Divide Rational Numbers</div>
+        <div class="card-rationale">Opens the course with the operation rules for negative integers, fractions, and decimals — the computational engine underlying every subsequent standard.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q1">2</div>
+        <div><span class="strand-pill sp-NSO">NSO</span></div>
+        <div class="card-code">MA.7.NSO.2.2</div>
+        <div class="card-title">All 4 Operations &mdash; Procedural Fluency</div>
+        <div class="card-rationale">Combines multiplication/division from step 1 with addition and subtraction into full four-operation fluency with rational numbers of all forms.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q1">3</div>
+        <div><span class="strand-pill sp-NSO">NSO</span></div>
+        <div class="card-code">MA.7.NSO.2.3</div>
+        <div class="card-title">Real-World Problems with Rational Numbers</div>
+        <div class="card-rationale">Applies four-operation fluency to authentic contexts. Closes the foundational NSO thread before introducing algebraic structure.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q1">4</div>
+        <div><span class="strand-pill sp-NSO">NSO</span></div>
+        <div class="card-code">MA.7.NSO.2.1</div>
+        <div class="card-title">Multi-Step Rational Number Problems</div>
+        <div class="card-rationale">Elevates the previous three standards into multi-step, mixed-operation problems. The capstone of number sense before algebra begins.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q1">5</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.2.1</div>
+        <div class="card-title">Algebraic Expressions with Rational Coefficients</div>
+        <div class="card-rationale">Translates rational number fluency into symbolic algebra — evaluating and simplifying expressions with rational coefficients and parentheses.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q1">6</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.2.2</div>
+        <div class="card-title">Write &amp; Solve Two-Step Equations</div>
+        <div class="card-rationale">The first formal equation-solving standard. Students apply rational number operations to solve px + q = r and p(x + q) = r &mdash; essential prerequisite for systems.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card gr8">
+        <div class="step-num sn-q1">7</div>
+        <span class="grade-badge">Gr. 8</span>
+        <div><span class="strand-pill sp-NSO">NSO</span></div>
+        <div class="card-code">MA.8.NSO.1.1</div>
+        <div class="card-title">Square Roots &amp; Cube Roots</div>
+        <div class="card-rationale">Bridges number sense into Grade 8 territory. Square and cube roots are needed to interpret the solutions to systems that involve nonlinear values.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card gr8">
+        <div class="step-num sn-q1">8</div>
+        <span class="grade-badge">Gr. 8</span>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.8.AR.2.2</div>
+        <div class="card-title">Solve Systems of Equations Graphically</div>
+        <div class="card-rationale">Introduces systems by finding intersections on a graph &mdash; visual and accessible. Builds on equation-writing from step 6 before moving to algebraic methods.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card gr8">
+        <div class="step-num sn-q1">9</div>
+        <span class="grade-badge">Gr. 8</span>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.8.AR.2.3</div>
+        <div class="card-title">Real-World Problems Using Systems</div>
+        <div class="card-rationale">Culminating Q1 standard. Students write and solve systems for real-world scenarios &mdash; the most demanding application of the quarter's algebraic content.</div>
+      </div>
+
+      <div class="cross-note cn-q1">
+        <strong>&#128279; Unlocks in Q2 &amp; Q3:</strong> Two-step equation fluency (AR.2.2) is the direct prerequisite for all percent and proportional problems in Q2. Systems thinking re-activates in Q3 when students compare linear functions across representations.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ Q2 ══════════ -->
+  <div class="quarter-col">
+    <div class="quarter-header qh-q2">
+      <div class="q-label">QUARTER 2</div>
+      <div class="q-count">7 standards</div>
+      <div class="q-theme">Irrational Numbers &rarr; Percent &rarr; Proportions</div>
+    </div>
+    <div class="cards-wrap">
+
+      <div class="std-card gr8">
+        <div class="step-num sn-q2">1</div>
+        <span class="grade-badge">Gr. 8</span>
+        <div><span class="strand-pill sp-NSO">NSO</span></div>
+        <div class="card-code">MA.8.NSO.1.7</div>
+        <div class="card-title">Apply Rational &amp; Irrational Number Understanding</div>
+        <div class="card-rationale">Opens Q2 by extending Q1 number sense into irrational territory. Connects square root knowledge (NSO.1.1) to approximation, ordering, and properties of rational vs. irrational sums/products.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q2">2</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.1.5</div>
+        <div class="card-title">Polygon Angle Sums</div>
+        <div class="card-rationale">A self-contained geometry unit — teaches the (n&minus;2)&times;180&deg; formula and requires equation-writing from Q1. Placed here as a focused two-day detour before the proportional reasoning sprint.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q2">3</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.3.1</div>
+        <div class="card-title">Percent Problems</div>
+        <div class="card-rationale">Begins the proportional reasoning sprint. Tax, tip, discount, and markup are foundational percent contexts that all students must master before moving to percent change.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q2">4</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.3.2</div>
+        <div class="card-title">Simple &amp; Compound Interest</div>
+        <div class="card-rationale">Applies percent fluency to financial formulas. The compound interest formula demands order-of-operations mastery from Q1, making this a meaningful extension of earlier work.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q2">5</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.3.3</div>
+        <div class="card-title">Percent Change &amp; Multi-Step Financial Problems</div>
+        <div class="card-rationale">Elevates percent to comparing old and new values &mdash; a stepping stone between unit-rate thinking and full proportional analysis. Culminates the financial math thread.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q2">6</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.4.5</div>
+        <div class="card-title">Proportional vs. Non-Proportional Relationships</div>
+        <div class="card-rationale">Generalizes percent and ratio work into the broader question of whether two quantities are proportional. Introduces rate of change across tables, graphs, and equations &mdash; the conceptual precursor to slope in Q3.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q2">7</div>
+        <div><span class="strand-pill sp-DP">DP</span></div>
+        <div class="card-code">MA.7.DP.1.3</div>
+        <div class="card-title">Statistical Displays &amp; Distributions</div>
+        <div class="card-rationale">Closes Q2 with a data analysis standard. Students analyze and create displays (histograms, box plots, dot plots) and interpret the shape and spread of distributions — activating skills needed for Q3's data standard.</div>
+      </div>
+
+      <div class="cross-note cn-q2">
+        <strong>&#128279; Unlocks in Q3:</strong> The rate of change concept from AR.4.5 becomes the formal definition of slope in Q3 (AR.4.1&ndash;4.3). Proportional vs. non-proportional reasoning directly primes the linear function strand and the transition to function notation (8.AR.3.1).
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════ Q3 ══════════ -->
+  <div class="quarter-col">
+    <div class="quarter-header qh-q3">
+      <div class="q-label">QUARTER 3</div>
+      <div class="q-count">15 standards &mdash; Longest quarter</div>
+      <div class="q-theme">Geometry &rarr; Data &rarr; Linear Functions</div>
+    </div>
+    <div class="cards-wrap">
+
+      <!-- ── Geometry block ── -->
+      <div class="sub-divider">
+        <div class="sub-divider-line"></div>
+        <div class="sub-divider-label">&#9650; Geometry</div>
+        <div class="sub-divider-line"></div>
+      </div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">1</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.1.1</div>
+        <div class="card-title">Angle Relationships</div>
+        <div class="card-rationale">Opens geometry with complementary, supplementary, vertical, and adjacent angles. Equation-writing from Q1 transfers directly here — the algebraic connection makes this a strong re-entry point.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">2</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.1.3</div>
+        <div class="card-title">Triangle Angle Sum</div>
+        <div class="card-rationale">Extends GR.1.1 immediately to triangles — same equation-writing skill, new 180° constraint. Builds directly on angle relationships with one new rule.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">3</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.1.4</div>
+        <div class="card-title">Triangle Inequality &amp; Construction</div>
+        <div class="card-rationale">Adds side-length constraints alongside angle constraints. Students explore when three lengths or angles can form a triangle, deepening spatial reasoning.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">4</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.1.2</div>
+        <div class="card-title">Scale Drawings</div>
+        <div class="card-rationale">Pivots from angle reasoning to proportional geometry. Reinforces Q2 ratio and proportional reasoning in a concrete spatial context.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">5</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.2.1</div>
+        <div class="card-title">Circumference &amp; Area of Circles</div>
+        <div class="card-rationale">Introduces π and the formulas C = 2πr and A = πr². Irrational number approximation from Q2 (NSO.1.7) is directly applicable here when evaluating circle expressions.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">6</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.2.2</div>
+        <div class="card-title">Area of Composite Figures</div>
+        <div class="card-rationale">Combines previously learned area formulas (rectangles, triangles, circles) into composite shapes. Tests decomposition strategy and multi-step computation.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">7</div>
+        <div><span class="strand-pill sp-GR">GR</span></div>
+        <div class="card-code">MA.7.GR.2.3</div>
+        <div class="card-title">Volume &amp; Surface Area of 3D Figures</div>
+        <div class="card-rationale">Extends flat-figure area skills into three dimensions — prisms, pyramids, and composite 3D figures. Culminates the geometry strand for the course.</div>
+      </div>
+
+      <!-- ── Data block ── -->
+      <div class="sub-divider">
+        <div class="sub-divider-line"></div>
+        <div class="sub-divider-label">&#9654; Data Analysis</div>
+        <div class="sub-divider-line"></div>
+      </div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">8</div>
+        <div><span class="strand-pill sp-DP">DP</span></div>
+        <div class="card-code">MA.7.DP.1.4</div>
+        <div class="card-title">Select Appropriate Measures &amp; Interpret Data</div>
+        <div class="card-rationale">Synthesizes all data work across Q2 and Q3. Students choose the best measure of center for skewed data sets, justify their reasoning, and explain the effect of outliers.</div>
+      </div>
+
+      <!-- ── Linear Functions block ── -->
+      <div class="sub-divider">
+        <div class="sub-divider-line"></div>
+        <div class="sub-divider-label">&#9654; Linear Functions &amp; 8th Grade Bridge</div>
+        <div class="sub-divider-line"></div>
+      </div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">9</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.4.1</div>
+        <div class="card-title">Determine Slope from Graphs, Tables &amp; Equations</div>
+        <div class="card-rationale">Formalizes the rate of change concept from Q2 (AR.4.5) into the definition of slope. Students calculate m from all three representations — the gateway to all linear function work ahead.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">10</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.4.2</div>
+        <div class="card-title">Graph &amp; Write Linear Equations (y = mx + b)</div>
+        <div class="card-rationale">Introduces slope-intercept form as the algebraic encoding of a line. Students graph using slope and y-intercept and write equations from graphs — the core linear skill of the course.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">11</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.4.3</div>
+        <div class="card-title">Interpret Slope &amp; y-Intercept in Context</div>
+        <div class="card-rationale">Shifts from procedural to interpretive. Students explain what m and b mean in real-world scenarios — a critical conceptual deepening that distinguishes procedural from conceptual mastery.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card">
+        <div class="step-num sn-q3">12</div>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.7.AR.4.4</div>
+        <div class="card-title">Compare Linear Relationships Across Representations</div>
+        <div class="card-rationale">Requires students to work across representations simultaneously — comparing two functions when one is given as a graph and another as a table or equation. High-level analytical thinking.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card gr8">
+        <div class="step-num sn-q3">13</div>
+        <span class="grade-badge">Gr. 8</span>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.8.AR.3.1</div>
+        <div class="card-title">Determine if a Relation is a Function</div>
+        <div class="card-rationale">Introduces formal function language — input, output, vertical line test. Students classify relations from ordered pairs, tables, mappings, and graphs before distinguishing linear from nonlinear.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card gr8">
+        <div class="step-num sn-q3">14</div>
+        <span class="grade-badge">Gr. 8</span>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.8.AR.3.2</div>
+        <div class="card-title">Linear vs. Nonlinear Functions</div>
+        <div class="card-rationale">Distinguishes linear functions (y = mx + b, constant rate of change) from nonlinear ones. Revisits all Q3 representations in a new classification framework.</div>
+      </div>
+
+      <div class="arrow-connector">&#8595;</div>
+
+      <div class="std-card gr8">
+        <div class="step-num sn-q3">15</div>
+        <span class="grade-badge">Gr. 8</span>
+        <div><span class="strand-pill sp-AR">AR</span></div>
+        <div class="card-code">MA.8.AR.3.4</div>
+        <div class="card-title">Compare Properties of Two Linear Functions</div>
+        <div class="card-rationale">Culminating standard of the year. Students compare two functions in different representations — the synthesis of every linear function skill built in Q2 and Q3. Direct preparation for Algebra I.</div>
+      </div>
+
+      <div class="cross-note cn-q3">
+        <strong>&#128640; Prepares for Algebra I:</strong> Slope (AR.4.1&ndash;4.3), function notation (8.AR.3.1), and multi-representation comparison (8.AR.3.4) are the exact foundations of 9th grade Algebra I. Students who complete RAMP 6 enter Algebra I with a significant head start on the linear functions unit.
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end flow-grid -->
+
+<!-- ══════════════════════════════════════════════════════
+     Q4 — TEST PREP / PM3 REVIEW
+══════════════════════════════════════════════════════ -->
+<div class="q4-section">
+  <div class="q4-header">
+    <div class="q4-badge">&#9733; QUARTER 4</div>
+    <div class="q4-header-text">
+      <h2>TEST PREP &amp; FAST PM3 REVIEW</h2>
+      <p>All 31 RAMP 6 standards reviewed in six strategic clusters &nbsp;&middot;&nbsp; Spiraled practice toward Algebra I readiness</p>
+    </div>
+  </div>
+  <div class="q4-body">
+    <p class="q4-intro">
+      Quarter 4 is a strategic, spiraled review of all Q1, Q2, and Q3 standards in preparation for the FAST PM3 assessment.
+      Standards are grouped into six clusters by conceptual strand. Start with Number Sense (Cluster 1) to re-activate
+      rational number fluency that supports every other cluster, then move through algebra, proportional reasoning,
+      geometry, linear functions, and data. Grade 8 standards are embedded throughout and should be reviewed in
+      the context of the Grade 7 standards they extend.
+    </p>
+
+    <div class="cluster-grid">
+
+      <!-- Cluster 1: Number Sense -->
+      <div class="cluster-card">
+        <div class="cluster-header ch-nso">
+          CLUSTER 1 &mdash; NUMBER SENSE
+          <div class="cluster-week">Week 1</div>
+        </div>
+        <div class="cluster-body">
+          <div class="cluster-standards">
+            <div class="cs-chip"><span class="cs-code">7.NSO.1.2</span><span class="cs-title">Multiply &amp; Divide Rationals</span></div>
+            <div class="cs-chip"><span class="cs-code">7.NSO.2.2</span><span class="cs-title">All 4 Operations — Fluency</span></div>
+            <div class="cs-chip"><span class="cs-code">7.NSO.2.3</span><span class="cs-title">Real-World Rational Problems</span></div>
+            <div class="cs-chip"><span class="cs-code">7.NSO.2.1</span><span class="cs-title">Multi-Step Rational Problems</span></div>
+            <div class="cs-chip"><span class="cs-code">8.NSO.1.1</span><span class="cs-title">Square &amp; Cube Roots</span></div>
+            <div class="cs-chip"><span class="cs-code">8.NSO.1.7</span><span class="cs-title">Rational &amp; Irrational Application</span></div>
+          </div>
+          <div class="cluster-focus">
+            <strong>Focus:</strong> Four operations with signed rational numbers; evaluating roots of perfect squares/cubes; approximating and ordering irrational values.
+          </div>
+          <div class="cluster-tip">
+            &#9888; Common error: Sign errors with negative fractions; confusing &#8730;2 as rational because it looks "simple."
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster 2: Algebra & Equations -->
+      <div class="cluster-card">
+        <div class="cluster-header ch-alg">
+          CLUSTER 2 &mdash; ALGEBRA &amp; EQUATIONS
+          <div class="cluster-week">Weeks 2&ndash;3</div>
+        </div>
+        <div class="cluster-body">
+          <div class="cluster-standards">
+            <div class="cs-chip"><span class="cs-code">7.AR.2.1</span><span class="cs-title">Algebraic Expressions</span></div>
+            <div class="cs-chip"><span class="cs-code">7.AR.2.2</span><span class="cs-title">Two-Step Equations</span></div>
+            <div class="cs-chip"><span class="cs-code">8.AR.2.2</span><span class="cs-title">Systems — Graphically</span></div>
+            <div class="cs-chip"><span class="cs-code">8.AR.2.3</span><span class="cs-title">Systems — Real-World Problems</span></div>
+          </div>
+          <div class="cluster-focus">
+            <strong>Focus:</strong> Evaluating and simplifying expressions with rational coefficients; writing and solving equations; identifying and interpreting system solutions as intersection points.
+          </div>
+          <div class="cluster-tip">
+            &#9888; Common error: Distributing incorrectly with negative coefficients; selecting the wrong intersection point on a system graph.
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster 3: Proportional & Financial Reasoning -->
+      <div class="cluster-card">
+        <div class="cluster-header ch-fin">
+          CLUSTER 3 &mdash; PROPORTIONAL &amp; FINANCIAL
+          <div class="cluster-week">Week 3</div>
+        </div>
+        <div class="cluster-body">
+          <div class="cluster-standards">
+            <div class="cs-chip"><span class="cs-code">7.AR.3.1</span><span class="cs-title">Percent Problems</span></div>
+            <div class="cs-chip"><span class="cs-code">7.AR.3.2</span><span class="cs-title">Simple &amp; Compound Interest</span></div>
+            <div class="cs-chip"><span class="cs-code">7.AR.3.3</span><span class="cs-title">Percent Change</span></div>
+            <div class="cs-chip"><span class="cs-code">7.AR.4.5</span><span class="cs-title">Proportional vs. Non-Proportional</span></div>
+          </div>
+          <div class="cluster-focus">
+            <strong>Focus:</strong> Tax, tip, discount, markup; applying I = Prt and compound interest formula; calculating percent change; distinguishing proportional and non-proportional relationships.
+          </div>
+          <div class="cluster-tip">
+            &#9888; Common error: Confusing percent of a number with percent change; applying simple interest formula to compound interest scenarios.
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster 4: Geometry -->
+      <div class="cluster-card">
+        <div class="cluster-header ch-gr">
+          CLUSTER 4 &mdash; GEOMETRY
+          <div class="cluster-week">Week 4</div>
+        </div>
+        <div class="cluster-body">
+          <div class="cluster-standards">
+            <div class="cs-chip"><span class="cs-code">7.GR.1.1</span><span class="cs-title">Angle Relationships</span></div>
+            <div class="cs-chip"><span class="cs-code">7.GR.1.3</span><span class="cs-title">Triangle Angle Sum</span></div>
+            <div class="cs-chip"><span class="cs-code">7.GR.1.4</span><span class="cs-title">Triangle Inequality</span></div>
+            <div class="cs-chip"><span class="cs-code">7.GR.1.5</span><span class="cs-title">Polygon Angle Sums</span></div>
+            <div class="cs-chip"><span class="cs-code">7.GR.1.2</span><span class="cs-title">Scale Drawings</span></div>
+            <div class="cs-chip"><span class="cs-code">7.GR.2.1</span><span class="cs-title">Circumference &amp; Area of Circles</span></div>
+            <div class="cs-chip"><span class="cs-code">7.GR.2.2</span><span class="cs-title">Area of Composite Figures</span></div>
+            <div class="cs-chip"><span class="cs-code">7.GR.2.3</span><span class="cs-title">Volume &amp; Surface Area</span></div>
+          </div>
+          <div class="cluster-focus">
+            <strong>Focus:</strong> Equation-writing for angle problems; applying (n&minus;2)&times;180&deg;; π-based area/circumference; decomposing composite figures; 3D surface area and volume.
+          </div>
+          <div class="cluster-tip">
+            &#9888; Common error: Using triangle angle sum for quadrilaterals; forgetting to divide by 2 for semi-circles; confusing lateral vs. total surface area.
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster 5: Linear Functions & 8th Grade Extensions -->
+      <div class="cluster-card">
+        <div class="cluster-header ch-lin">
+          CLUSTER 5 &mdash; LINEAR FUNCTIONS
+          <div class="cluster-week">Weeks 5&ndash;6</div>
+        </div>
+        <div class="cluster-body">
+          <div class="cluster-standards">
+            <div class="cs-chip"><span class="cs-code">7.AR.4.1</span><span class="cs-title">Determine Slope</span></div>
+            <div class="cs-chip"><span class="cs-code">7.AR.4.2</span><span class="cs-title">Graph &amp; Write y = mx + b</span></div>
+            <div class="cs-chip"><span class="cs-code">7.AR.4.3</span><span class="cs-title">Interpret Slope &amp; y-Intercept</span></div>
+            <div class="cs-chip"><span class="cs-code">7.AR.4.4</span><span class="cs-title">Compare Linear Relationships</span></div>
+            <div class="cs-chip"><span class="cs-code">8.AR.3.1</span><span class="cs-title">Is It a Function?</span></div>
+            <div class="cs-chip"><span class="cs-code">8.AR.3.2</span><span class="cs-title">Linear vs. Nonlinear</span></div>
+            <div class="cs-chip"><span class="cs-code">8.AR.3.4</span><span class="cs-title">Compare Two Linear Functions</span></div>
+          </div>
+          <div class="cluster-focus">
+            <strong>Focus:</strong> Calculating and interpreting slope from all representations; writing and graphing y = mx + b; classifying relations as functions; comparing two linear functions side-by-side.
+          </div>
+          <div class="cluster-tip">
+            &#9888; Common error: Inverting rise/run; failing the vertical line test on curved graphs; confusing rate of change with initial value when comparing functions.
+          </div>
+        </div>
+      </div>
+
+      <!-- Cluster 6: Data Analysis -->
+      <div class="cluster-card">
+        <div class="cluster-header ch-data">
+          CLUSTER 6 &mdash; DATA ANALYSIS
+          <div class="cluster-week">Week 7</div>
+        </div>
+        <div class="cluster-body">
+          <div class="cluster-standards">
+            <div class="cs-chip"><span class="cs-code">7.DP.1.3</span><span class="cs-title">Statistical Displays</span></div>
+            <div class="cs-chip"><span class="cs-code">7.DP.1.4</span><span class="cs-title">Select Measures &amp; Interpret</span></div>
+          </div>
+          <div class="cluster-focus">
+            <strong>Focus:</strong> Reading and constructing histograms, box plots, and dot plots; choosing mean vs. median for skewed data; identifying outliers and explaining their effect on center and spread.
+          </div>
+          <div class="cluster-tip">
+            &#9888; Common error: Using the mean when a strong outlier is present; confusing IQR with range; misreading histogram bar heights as individual values.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end cluster-grid -->
+
+    <div class="q4-footer-note">
+      <strong>&#127919; FAST PM3 Strategy for RAMP 6:</strong> The PM3 assessment is cumulative across all 31 standards. Begin Cluster 1 (Number Sense) first &mdash; rational number fluency underpins every other cluster. Reserve the most class time for Cluster 5 (Linear Functions), as the 8th grade extensions (AR.3.1, 3.2, 3.4) are the most novel content and carry high conceptual demand. Use mixed-review problem sets between clusters to build retrieval strength across all six strands. Students completing RAMP 6 successfully are positioned to enter Algebra I with strong linear function intuition and equation-solving confidence.
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>&copy; 2025 The Calculated Classroom &nbsp;&middot;&nbsp; Axiomatic Field LLC.</strong>
+  All rights reserved. This tool and its content &mdash; including standards alignment data, annotations, and instructional sequence recommendations &mdash;
+  are the intellectual property of The Calculated Classroom. Unauthorized reproduction, distribution, or commercial use
+  without written permission is strictly prohibited.
+</footer>
+
+</body>
+</html>
