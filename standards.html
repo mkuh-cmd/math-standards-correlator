@@ -56,69 +56,89 @@
     background: white;
     border-bottom: 1px solid var(--gray200);
     padding: 12px 24px;
-    display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+    display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }
   .control-group { display: flex; gap: 6px; align-items: center; }
-  .control-label { font-size: 12px; font-weight: 600; color: var(--gray600); text-transform: uppercase; letter-spacing: .05em; margin-right: 4px; }
+  .control-label {
+    font-size: 11px; font-weight: 700; color: var(--gray600);
+    text-transform: uppercase; letter-spacing: .07em; margin-right: 2px;
+  }
 
   .grade-btn, .quarter-btn {
-    padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--gray200);
-    background: white; font-size: 14px; font-weight: 500; cursor: pointer;
-    transition: all .15s;
+    padding: 6px 17px; border-radius: 999px;
+    border: 1.5px solid var(--gray200);
+    background: #fafafa; font-size: 13px; font-weight: 600;
+    cursor: pointer; color: var(--gray800);
+    letter-spacing: 0.02em;
+    transition: all .18s;
   }
-  .grade-btn.active { background: var(--fl); color: white; border-color: var(--fl); }
-  .quarter-btn[data-quarter="Q1"].active  { background: var(--q1); color: white; border-color: var(--q1); }
-  .quarter-btn[data-quarter="Q2"].active  { background: var(--q2); color: white; border-color: var(--q2); }
-  .quarter-btn[data-quarter="Q3"].active  { background: var(--q3); color: white; border-color: var(--q3); }
-  .quarter-btn[data-quarter="Q4"].active  { background: var(--q4);  color: white; border-color: var(--q4);  }
-  .quarter-btn[data-quarter="PM3"].active { background: var(--pm3); color: white; border-color: var(--pm3); }
-  .grade-btn:hover:not(.active), .quarter-btn:hover:not(.active) { border-color: #999; }
+  .grade-btn.active {
+    background: var(--fl); color: white; border-color: var(--fl);
+    box-shadow: 0 0 0 3px rgba(0,48,135,0.15);
+  }
+  .quarter-btn[data-quarter="Q1"].active  { background: var(--q1); color: white; border-color: var(--q1); box-shadow: 0 0 0 3px rgba(29,111,164,0.18); }
+  .quarter-btn[data-quarter="Q2"].active  { background: var(--q2); color: white; border-color: var(--q2); box-shadow: 0 0 0 3px rgba(46,125,50,0.18); }
+  .quarter-btn[data-quarter="Q3"].active  { background: var(--q3); color: white; border-color: var(--q3); box-shadow: 0 0 0 3px rgba(106,27,154,0.18); }
+  .quarter-btn[data-quarter="Q4"].active  { background: var(--q4);  color: white; border-color: var(--q4);  box-shadow: 0 0 0 3px rgba(176,125,0,0.18); }
+  .quarter-btn[data-quarter="PM3"].active { background: var(--pm3); color: white; border-color: var(--pm3); box-shadow: 0 0 0 3px rgba(0,121,107,0.18); }
+  .grade-btn:hover:not(.active), .quarter-btn:hover:not(.active) {
+    border-color: var(--fl); color: var(--fl); background: var(--fl-light);
+  }
 
   #search-box {
     margin-left: auto;
-    padding: 6px 12px; border: 1.5px solid var(--gray200);
-    border-radius: 20px; font-size: 14px; width: 220px; outline: none;
+    padding: 7px 14px; border: 1.5px solid var(--gray200);
+    border-radius: 999px; font-size: 13px; width: 220px; outline: none;
+    background: #fafafa; color: var(--gray800);
+    transition: border-color .18s, box-shadow .18s;
   }
-  #search-box:focus { border-color: var(--fl); }
+  #search-box:focus {
+    border-color: var(--fl);
+    box-shadow: 0 0 0 3px rgba(0,48,135,0.12);
+    background: white;
+  }
 
   /* ── Teaching Flow dropdown ── */
   .flow-dropdown { position: relative; }
 
   .flow-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 6px 16px; border-radius: 20px;
-    background: var(--fl); color: white;
-    font-size: 14px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 17px; border-radius: 999px;
+    background: white; color: var(--fl);
+    font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
     cursor: pointer; border: 1.5px solid var(--fl);
-    white-space: nowrap; transition: opacity .15s; user-select: none;
+    white-space: nowrap;
+    transition: background .18s, color .18s;
+    user-select: none;
   }
-  .flow-btn:hover { opacity: 0.85; }
-  .flow-btn .caret { font-size: 10px; margin-left: 2px; }
+  .flow-btn:hover { background: var(--fl); color: white; }
+  .flow-btn .caret { font-size: 10px; margin-left: 1px; }
 
   .flow-menu {
     display: none;
-    position: absolute; top: calc(100% + 6px); right: 0;
+    position: absolute; top: calc(100% + 8px); right: 0;
     background: white; border: 1.5px solid var(--gray200);
-    border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-    min-width: 220px; z-index: 100; overflow: hidden;
+    border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    min-width: 230px; z-index: 100; overflow: hidden;
   }
   .flow-menu.open { display: block; }
 
   .flow-menu-header {
-    padding: 8px 14px 6px;
+    padding: 9px 14px 7px;
     font-size: 10px; font-weight: 700; letter-spacing: .08em;
     color: var(--gray600); text-transform: uppercase;
     border-bottom: 1px solid var(--gray200);
   }
   .flow-menu a {
     display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px;
-    font-size: 13px; font-weight: 500; color: var(--gray800);
-    text-decoration: none; transition: background .1s;
+    padding: 11px 14px;
+    font-size: 13px; font-weight: 600; color: var(--gray800);
+    text-decoration: none; transition: background .12s;
   }
   .flow-menu a:hover { background: var(--fl-light); color: var(--fl); }
   .flow-menu a .menu-icon { font-size: 15px; }
-  .flow-menu a .menu-sub { font-size: 11px; color: var(--gray600); display: block; margin-top: 1px; }
+  .flow-menu a .menu-sub { font-size: 11px; color: var(--gray600); display: block; margin-top: 1px; font-weight: 400; }
   .flow-menu a:not(:last-child) { border-bottom: 1px solid var(--gray200); }
 
   .layout {
