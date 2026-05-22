@@ -309,14 +309,11 @@
   }
   .ixl-body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     background: #f9f7ff;
   }
   .ixl-col {
     padding: 12px 14px;
-  }
-  .ixl-col:first-child {
-    border-right: 1px solid #e8e0f0;
   }
   .ixl-col-label {
     font-size: 10px; font-weight: 800;
@@ -2603,12 +2600,7 @@ function ixlSection(s) {
       </div>
       <div class="ixl-body">
         <div class="ixl-col">
-          <div class="ixl-col-label">Standard</div>
           ${hasStd ? ixl.standard.map(i => skillTile(i, false)).join("") : placeholder}
-        </div>
-        <div class="ixl-col">
-          <div class="ixl-col-label ixl-adv-label">Advanced</div>
-          ${hasAdv ? ixl.advanced.map(i => skillTile(i, true)).join("") : placeholder}
         </div>
       </div>
     </div>`;
