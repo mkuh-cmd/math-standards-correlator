@@ -57,11 +57,14 @@
       padding: 16px 28px 18px;
     }
     .back-link {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 0.8rem; color: var(--fl); text-decoration: none;
-      font-weight: 600; margin-bottom: 8px;
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 18px; border-radius: 999px;
+      border: 1.5px solid var(--fl); color: var(--fl);
+      background: white; font-size: 0.82rem; font-weight: 600;
+      text-decoration: none; margin-bottom: 12px;
+      transition: background 0.18s, color 0.18s;
     }
-    .back-link:hover { text-decoration: underline; }
+    .back-link:hover { background: var(--fl); color: white; }
     .page-intro h2 { font-size: 1.05rem; color: var(--fl); font-weight: 700; }
     .page-intro p { font-size: 0.83rem; color: var(--muted); margin-top: 5px; max-width: 850px; line-height: 1.5; }
 
