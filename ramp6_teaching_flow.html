@@ -56,12 +56,16 @@
       border-bottom: 2px solid #e0e0e0;
       padding: 16px 28px 18px;
     }
+    .page-intro-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; margin-bottom: 6px;
+    }
     .back-link {
       display: inline-flex; align-items: center; gap: 7px;
       padding: 7px 18px; border-radius: 999px;
       border: 1.5px solid var(--fl); color: var(--fl);
       background: white; font-size: 0.82rem; font-weight: 600;
-      text-decoration: none; margin-bottom: 12px;
+      text-decoration: none; flex-shrink: 0;
       transition: background 0.18s, color 0.18s;
     }
     .back-link:hover { background: var(--fl); color: white; }
@@ -585,8 +589,10 @@
 </div><!-- /.preface-page -->
 
 <div class="page-intro">
-  <a class="back-link" href="standards.html">&#8592; Back to Standards Alignment Tool</a>
-  <h2>Recommended Teaching Sequence &mdash; RAMP 6 <span class="ramp-pill">ADVANCED</span></h2>
+  <div class="page-intro-row">
+    <h2>Recommended Teaching Sequence &mdash; RAMP 6 <span class="ramp-pill">ADVANCED</span></h2>
+    <a class="back-link" href="standards.html">&#8592; Back to Standards Alignment Tool</a>
+  </div>
   <p>
     RAMP 6 is an accelerated course that covers 7th grade standards alongside selected 8th grade content.
     Standards within each quarter are ordered to maximize conceptual coherence &mdash; number sense foundations first,
