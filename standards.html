@@ -348,20 +348,21 @@
   }
 
   .ixl-placeholder {
-    padding: 14px 10px;
-    display: flex; flex-direction: column; align-items: center;
-    gap: 6px; text-align: center;
+    padding: 12px 14px;
+    display: flex; align-items: flex-start; gap: 8px;
+    background: #f9fafb; border-radius: 6px;
+    margin: 4px 0;
   }
-  .ixl-placeholder-icon { font-size: 20px; opacity: 0.35; }
+  .ixl-placeholder-icon { font-size: 13px; opacity: 0.5; flex-shrink: 0; margin-top: 1px; }
   .ixl-placeholder-text {
-    font-size: 11px; color: #9ca3af; font-style: italic; line-height: 1.4;
+    font-size: 11.5px; color: #6b7280; line-height: 1.5;
   }
   .ixl-placeholder-chip {
     display: inline-block;
-    background: #f3f0ff; color: #7c6bbf;
-    font-size: 10px; font-weight: 700;
-    padding: 2px 10px; border-radius: 10px;
-    border: 1px dashed #c4b8f0;
+    background: #f3f4f6; color: #9ca3af;
+    font-size: 10px; font-weight: 600;
+    padding: 2px 9px; border-radius: 10px;
+    border: 1px solid #e5e7eb;
     letter-spacing: 0.03em;
   }
 </style>
@@ -2972,9 +2973,10 @@ function ixlSection(s) {
 
   const placeholder = `
     <div class="ixl-placeholder">
-      <div class="ixl-placeholder-icon">&#128336;</div>
-      <span class="ixl-placeholder-chip">Coming Soon</span>
-      <div class="ixl-placeholder-text">IXL skill codes will be added here</div>
+      <div class="ixl-placeholder-icon">&#8212;</div>
+      <div class="ixl-placeholder-text">
+        IXL does not currently offer practice skills aligned to this standard.
+      </div>
     </div>`;
 
   return `
