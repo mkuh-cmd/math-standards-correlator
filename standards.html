@@ -28,10 +28,9 @@
     padding: 16px 24px;
     display: flex; align-items: center; gap: 16px;
   }
-  .header-badge {
-    background: #FFB81C; color: #003087;
-    font-weight: 800; font-size: 13px;
-    padding: 4px 10px; border-radius: 4px; white-space: nowrap;
+  .brand-logo svg {
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
   }
   .header-brand {
     display: flex; flex-direction: column; gap: 1px;
@@ -435,7 +434,18 @@
 <body>
 
 <header>
-  <div class="header-badge">Florida</div>
+  <div class="brand-logo">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer rounded square -->
+      <rect width="48" height="48" rx="11" fill="#FFB81C"/>
+      <!-- Inner navy panel -->
+      <rect x="4" y="4" width="40" height="40" rx="8" fill="#003087"/>
+      <!-- Top accent bar -->
+      <rect x="10" y="10" width="28" height="4" rx="2" fill="#FFB81C"/>
+      <!-- CC monogram -->
+      <text x="24" y="36" font-family="'Segoe UI',system-ui,sans-serif" font-weight="900" font-size="17" fill="#FFB81C" text-anchor="middle" letter-spacing="-0.5">CC</text>
+    </svg>
+  </div>
   <div class="header-brand">
     <div class="brand-name">The <span>Calculated</span> Classroom</div>
     <div class="brand-sub">by Axiomatic Field</div>
