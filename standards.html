@@ -113,6 +113,11 @@
   }
   .sel-btn:hover:not(.active) { background: var(--fl-light); }
   .sel-btn.active { background: var(--fl); color: white; }
+  .sel-btn.active-q1  { background: var(--q1);  border-color: var(--q1);  color: white; box-shadow: 0 0 0 3px rgba(29,111,164,0.18); }
+  .sel-btn.active-q2  { background: var(--q2);  border-color: var(--q2);  color: white; box-shadow: 0 0 0 3px rgba(46,125,50,0.18); }
+  .sel-btn.active-q3  { background: var(--q3);  border-color: var(--q3);  color: white; box-shadow: 0 0 0 3px rgba(106,27,154,0.18); }
+  .sel-btn.active-q4  { background: var(--q4);  border-color: var(--q4);  color: white; box-shadow: 0 0 0 3px rgba(176,125,0,0.18); }
+  .sel-btn.active-pm3 { background: var(--pm3); border-color: var(--pm3); color: white; box-shadow: 0 0 0 3px rgba(0,121,107,0.18); }
   .sel-btn .caret { font-size: 10px; margin-left: 1px; }
 
   .sel-menu {
@@ -490,12 +495,34 @@
       </div>
     </div>
   </div>
+  <!-- Period dropdown -->
   <div class="control-group">
     <span class="control-label">Period</span>
-    <button class="quarter-btn active" data-quarter="Q1">Q1</button>
-    <button class="quarter-btn" data-quarter="Q2">Q2</button>
-    <button class="quarter-btn" data-quarter="Q3">Q3</button>
-    <button class="quarter-btn" data-quarter="PM3">PM3</button>
+    <div class="sel-dropdown" id="period-dd">
+      <div class="sel-btn active-q1" id="period-toggle">
+        <span id="period-label">Quarter 1</span>
+        <span class="caret">&#9660;</span>
+      </div>
+      <div class="sel-menu" id="period-menu">
+        <div class="flow-menu-header">Select Period</div>
+        <a href="#" data-quarter="Q1">
+          <span class="menu-icon" style="color:var(--q1)">&#11044;</span>
+          <span>Quarter 1<span class="menu-sub">Q1 &mdash; First Quarter</span></span>
+        </a>
+        <a href="#" data-quarter="Q2">
+          <span class="menu-icon" style="color:var(--q2)">&#11044;</span>
+          <span>Quarter 2<span class="menu-sub">Q2 &mdash; Second Quarter</span></span>
+        </a>
+        <a href="#" data-quarter="Q3">
+          <span class="menu-icon" style="color:var(--q3)">&#11044;</span>
+          <span>Quarter 3<span class="menu-sub">Q3 &mdash; Third Quarter</span></span>
+        </a>
+        <a href="#" data-quarter="PM3">
+          <span class="menu-icon" style="color:var(--pm3)">&#11044;</span>
+          <span>PM3<span class="menu-sub">Progress Monitoring 3</span></span>
+        </a>
+      </div>
+    </div>
   </div>
   <div class="flow-dropdown">
     <div class="flow-btn" id="flow-toggle">&#128202; Instructional Sequence <span class="caret">&#9660;</span></div>
@@ -2373,7 +2400,7 @@ function buildRamp6() {
 }
 
 // ─── DROPDOWN HELPERS ────────────────────────────────────────────────────────
-const ALL_MENUS = ["flow-menu", "grade-menu", "adv-menu"];
+const ALL_MENUS = ["flow-menu", "grade-menu", "adv-menu", "period-menu"];
 
 function closeAllMenus(except) {
   ALL_MENUS.forEach(id => {
@@ -2397,11 +2424,20 @@ document.addEventListener("click", () => closeAllMenus(null));
 bindDropdown("flow-toggle", "flow-menu");
 
 // ─── GRADE DROPDOWN ──────────────────────────────────────────────────────────
+bindDropdown("period-toggle", "period-menu");
 bindDropdown("grade-toggle", "grade-menu");
 bindDropdown("adv-toggle",   "adv-menu");
 
-const GRADE_LABELS = { 6: "6th Grade", 7: "7th Grade", 8: "8th Grade" };
-const ADV_LABELS   = { 0: "RAMP 6" };
+const GRADE_LABELS  = { 6: "6th Grade", 7: "7th Grade", 8: "8th Grade" };
+const ADV_LABELS    = { 0: "RAMP 6" };
+const PERIOD_LABELS = { Q1: "Quarter 1", Q2: "Quarter 2", Q3: "Quarter 3", Q4: "Quarter 4", PM3: "PM3" };
+const PERIOD_CLASS  = { Q1: "active-q1", Q2: "active-q2", Q3: "active-q3", Q4: "active-q4", PM3: "active-pm3" };
+
+function syncPeriodDropdown(q) {
+  const btn = document.getElementById("period-toggle");
+  btn.className = "sel-btn " + (PERIOD_CLASS[q] || "active");
+  document.getElementById("period-label").textContent = PERIOD_LABELS[q] || q;
+}
 
 function syncGradeDropdowns(g) {
   const isAdv = (g === 0);
@@ -2424,6 +2460,14 @@ document.querySelectorAll("#adv-menu a[data-grade]").forEach(a =>
     e.preventDefault();
     document.getElementById("adv-menu").classList.remove("open");
     setGrade(a.dataset.grade);
+  })
+);
+
+document.querySelectorAll("#period-menu a[data-quarter]").forEach(a =>
+  a.addEventListener("click", e => {
+    e.preventDefault();
+    document.getElementById("period-menu").classList.remove("open");
+    setQuarter(a.dataset.quarter);
   })
 );
 
@@ -3162,16 +3206,12 @@ function setGrade(g) {
 function setQuarter(q) {
   currentQuarter = q;
   currentCode = null;
-  document.querySelectorAll(".quarter-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.quarter === q);
-  });
+  syncPeriodDropdown(q);
   renderList();
   renderEmpty();
 }
 
 // ─── EVENT LISTENERS ─────────────────────────────────────────────────────────
-document.querySelectorAll(".quarter-btn").forEach(b =>
-  b.addEventListener("click", () => setQuarter(b.dataset.quarter)));
 
 document.getElementById("search-box").addEventListener("input", e => {
   searchQuery = e.target.value.trim();
@@ -3182,6 +3222,7 @@ document.getElementById("search-box").addEventListener("input", e => {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 syncGradeDropdowns(currentGrade);
+syncPeriodDropdown(currentQuarter);
 renderList();
 </script>
 </body>
