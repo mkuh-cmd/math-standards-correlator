@@ -211,6 +211,17 @@
     .cn-q3 { background: #e0f7fa; border-color: var(--ramp); }
     .cross-note strong { color: #333; }
 
+    /* ── CARD TIME ── */
+    .card-time {
+      display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+      margin-top: 8px; padding-top: 7px;
+      border-top: 1px dashed #e0e0e0;
+      font-size: 0.71rem; color: #888;
+    }
+    .card-time b { color: #333; font-weight: 700; }
+    .ct-lbl { font-size: 0.64rem; color: #bbb; }
+    .ct-sep { color: #ddd; padding: 0 3px; }
+
     /* ── FOOTER ── */
     footer {
       text-align: center;
@@ -1172,6 +1183,58 @@
   function togglePreface() {
     document.getElementById('prefacePage').classList.toggle('pf-open');
   }
+
+  // ── Teaching time badges ─────────────────────────────────────────────────
+  // Days = suggested 45-min class periods per benchmark; blocks = 90-min equivalent
+  (function(){
+    const D = {
+      // Q1 — Rational Numbers → Algebra → Systems
+      'MA.7.NSO.1.2': 5,  // Multiply & Divide Rational Numbers
+      'MA.7.NSO.2.2': 4,  // All 4 Operations — Procedural Fluency
+      'MA.7.NSO.2.3': 4,  // Real-World Problems with Rational Numbers
+      'MA.7.NSO.2.1': 4,  // Multi-Step Rational Number Problems
+      'MA.7.AR.2.1':  4,  // Algebraic Expressions with Rational Coefficients
+      'MA.7.AR.2.2':  5,  // Write & Solve Two-Step Equations
+      'MA.8.NSO.1.1': 3,  // Square Roots & Cube Roots (Gr. 8)
+      'MA.8.AR.2.2':  5,  // Solve Systems of Equations Graphically (Gr. 8)
+      'MA.8.AR.2.3':  4,  // Real-World Problems Using Systems (Gr. 8)
+      // Q2 — Irrational Numbers → Percent → Proportions
+      'MA.8.NSO.1.7': 4,  // Apply Rational & Irrational Number Understanding (Gr. 8)
+      'MA.7.GR.1.5':  3,  // Polygon Angle Sums
+      'MA.7.AR.3.1':  4,  // Percent Problems
+      'MA.7.AR.3.2':  4,  // Simple & Compound Interest
+      'MA.7.AR.3.3':  5,  // Percent Change & Multi-Step Financial Problems
+      'MA.7.AR.4.5':  5,  // Proportional vs. Non-Proportional Relationships
+      'MA.7.DP.1.3':  4,  // Statistical Displays & Distributions
+      // Q3 — Geometry → Data → Linear Functions
+      'MA.7.GR.1.1':  3,  // Angle Relationships
+      'MA.7.GR.1.3':  3,  // Triangle Angle Sum
+      'MA.7.GR.1.4':  3,  // Triangle Inequality & Construction
+      'MA.7.GR.1.2':  4,  // Scale Drawings
+      'MA.7.GR.2.1':  4,  // Circumference & Area of Circles
+      'MA.7.GR.2.2':  4,  // Area of Composite Figures
+      'MA.7.GR.2.3':  5,  // Volume & Surface Area of 3D Figures
+      'MA.7.DP.1.4':  3,  // Select Appropriate Measures & Interpret Data
+      'MA.7.AR.4.1':  4,  // Determine Slope from Graphs, Tables & Equations
+      'MA.7.AR.4.2':  5,  // Graph & Write Linear Equations (y = mx + b)
+      'MA.7.AR.4.3':  4,  // Interpret Slope & y-Intercept in Context
+      'MA.7.AR.4.4':  4,  // Compare Linear Relationships Across Representations
+      'MA.8.AR.3.1':  4,  // Determine if a Relation is a Function (Gr. 8)
+      'MA.8.AR.3.2':  3,  // Linear vs. Nonlinear Functions (Gr. 8)
+      'MA.8.AR.3.4':  4   // Compare Properties of Two Linear Functions (Gr. 8)
+    };
+    document.querySelectorAll('.std-card').forEach(card => {
+      const codeEl = card.querySelector('.card-code');
+      if (!codeEl) return;
+      const days = D[codeEl.textContent.trim()];
+      if (!days) return;
+      const blk = Math.ceil(days / 2);
+      const div = document.createElement('div');
+      div.className = 'card-time';
+      div.innerHTML = `⏱ <b>${days}</b> <span class="ct-lbl">days&nbsp;(45-min)</span><span class="ct-sep">·</span><b>${blk}</b> <span class="ct-lbl">block${blk !== 1 ? 's' : ''}&nbsp;(90-min)</span>`;
+      card.appendChild(div);
+    });
+  })();
 </script>
 </body>
 </html>
